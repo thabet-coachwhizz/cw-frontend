@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { saveTokens } from '@/lib/auth';
 import { API } from '@/lib/api';
+import { apiClient } from '@/lib/apiClient';
 
 export default function LoginForm() {
   const router = useRouter();
@@ -22,7 +23,7 @@ export default function LoginForm() {
     }
 
     try {
-      const res = await fetch(API.LOGIN, {
+      const res = await apiClient(API.LOGIN, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
