@@ -1,13 +1,19 @@
-import Image from 'next/image';
+'use client';
+import useAuth from '@/hooks/useAuth';
 
 export default function Home() {
+  const { user, loading, logout } = useAuth();
+
+  if (loading) return <div className="p-8">Loading...</div>;
+
+  if (!user) return <div className="p-8">You are not authenticated.</div>;
+  console.log('User::: ', user);
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <h1>Coach whizz</h1>
-      <p>
-        AI-powered soft skills training platform built for interns and early career professionals to
-        take their human skills to the next level.
-      </p>
-    </div>
+    <main className="p-8">
+      <h1 className="text-xl font-bold">Welcome, {user?.email || 'user'} 👋</h1>
+      <button className="mt-4 underline text-blue-600" onClick={logout}>
+        Logout
+      </button>
+    </main>
   );
 }

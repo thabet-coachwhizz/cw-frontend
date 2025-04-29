@@ -30,16 +30,14 @@ export default function LoginForm() {
       });
 
       const data = await res.json();
-
       if (!res.ok) {
         setError(data?.error || 'Login failed.');
         return;
       }
-
       saveTokens(data.access_token, data.refresh_token);
+      document.cookie = `access_token=${data.access_token}; path=/`;
       router.replace('/');
     } catch (err) {
-      console.error('Login error', err);
       setError('Something went wrong. Please try again.');
     }
   };
