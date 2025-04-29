@@ -1,51 +1,53 @@
-// src/hooks/useAuth.ts
 'use client';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { jwtDecode } from 'jwt-decode';
-import { getAccessToken, clearTokens } from '@/lib/auth';
+import { clearTokens } from '@/lib/auth';
+import { apiClient } from '@/lib/apiClient';
+import { API } from '@/lib/api';
 
-interface DecodedToken {
-  exp: number;
-  email?: string;
+interface UserProfile {
+  id: string;
+  email: string;
+  name?: string;
 }
 
 const useAuth = () => {
   const router = useRouter();
-  const [user, setUser] = useState<DecodedToken | null>(null);
+  const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const token = getAccessToken();
-    if (!token) {
-      setLoading(false);
-      return;
-    }
-
+  const fetchUser = async () => {
     try {
-      const decoded = jwtDecode<DecodedToken>(token);
-      const isExpired = decoded.exp * 1000 < Date.now();
-
-      if (isExpired) {
-        clearTokens();
-        setUser(null);
-        router.replace('/auth/login');
+      const res = await apiClient(API.PROFILE, {
+        method: 'GET',
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data);
       } else {
-        setUser(decoded);
+        setUser(null);
       }
-    } catch {
-      clearTokens();
+    } catch (error) {
+      setUser(null);
     } finally {
       setLoading(false);
     }
-  }, [router]);
-
-  const logout = () => {
-    clearTokens();
-    setUser(null);
-    router.replace('/auth/login');
   };
+  const logout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      clearTokens();
+    } finally {
+      setUser(null);
+      router.replace('/auth/login');
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+    // Only run once on mount
+  }, []);
 
   return { user, loading, logout };
 };

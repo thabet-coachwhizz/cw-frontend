@@ -1,14 +1,9 @@
-// src/components/auth/LoginForm.tsx
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { saveTokens } from '@/lib/auth';
-import { API } from '@/lib/api';
-import { apiClient } from '@/lib/apiClient';
 
 export default function LoginForm() {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -28,15 +23,13 @@ export default function LoginForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
-
       const data = await res.json();
       if (!res.ok) {
         setError(data?.error || 'Login failed.');
         return;
       }
-      saveTokens(data.access_token, data.refresh_token);
-      document.cookie = `access_token=${data.access_token}; path=/`;
-      router.replace('/');
+      saveTokens('', data.refresh_token); // ✅ Only store refresh token
+      window.location.href = '/';
     } catch (err) {
       setError('Something went wrong. Please try again.');
     }

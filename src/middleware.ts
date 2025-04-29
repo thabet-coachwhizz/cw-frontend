@@ -8,7 +8,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { jwtDecode } from 'jwt-decode';
 
-const PUBLIC_PATHS = ['/auth/login', '/auth/reset-password'];
+const PUBLIC_PATHS = ['/auth/login', '/auth/reset-password', '/api/auth'];
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -17,7 +17,6 @@ export function middleware(req: NextRequest) {
   if (PUBLIC_PATHS.some((path) => pathname.startsWith(path))) {
     return NextResponse.next();
   }
-
   const token =
     req.cookies.get('access_token')?.value ||
     req.headers.get('authorization')?.replace('Bearer ', '');
@@ -25,7 +24,6 @@ export function middleware(req: NextRequest) {
   if (!token) {
     return NextResponse.redirect(new URL('/auth/login', req.url));
   }
-
   try {
     const decoded: any = jwtDecode(token);
 

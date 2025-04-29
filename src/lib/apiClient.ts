@@ -1,22 +1,18 @@
 // src/lib/apiClient.ts
-import { API } from '@/lib/api';
-import { getAccessToken, getRefreshToken, saveTokens, clearTokens } from '@/lib/auth';
+import { getRefreshToken, clearTokens } from '@/lib/auth'; // No getAccessToken anymore
 
 interface FetchOptions extends RequestInit {
   retry?: boolean; // Prevent infinite retry loop
 }
 
 export const apiClient = async (url: string, options: FetchOptions = {}): Promise<Response> => {
-  let accessToken = getAccessToken();
-
   const headers = new Headers(options.headers || {});
-  if (accessToken) {
-    headers.set('Authorization', `Bearer ${accessToken}`);
-  }
   headers.set('Content-Type', 'application/json');
+  // ❌ DO NOT attach Authorization manually
+  // Access token will come automatically from HttpOnly cookie
 
   try {
-    const response = await fetch(url, { ...options, headers });
+    const response = await fetch(url, { ...options, headers, credentials: 'include' }); // ✅ add credentials: "include"
 
     if (response.status === 401 && !options.retry) {
       const refreshToken = getRefreshToken();
@@ -29,10 +25,11 @@ export const apiClient = async (url: string, options: FetchOptions = {}): Promis
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ refresh_token: refreshToken }),
+        credentials: 'include', // ✅ make sure cookies are sent
       });
 
       if (refreshRes.ok) {
-        // Token is refreshed — try the original request again
+        // Token refreshed, try the original request again
         return apiClient(url, { ...options, retry: true });
       } else {
         clearTokens();
