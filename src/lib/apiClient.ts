@@ -21,24 +21,19 @@ export const apiClient = async (url: string, options: FetchOptions = {}): Promis
     if (response.status === 401 && !options.retry) {
       const refreshToken = getRefreshToken();
       if (!refreshToken) {
-        throw new Error('Unauthorized: No refresh token');
+        clearTokens();
+        throw new Error('No refresh token available.');
       }
 
-      const refreshRes = await fetch(API.REFRESH, {
+      const refreshRes = await fetch('/api/auth/refresh', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ refresh_token: refreshToken }),
       });
 
       if (refreshRes.ok) {
-        const refreshData = await refreshRes.json();
-        saveTokens(refreshData.access_token, refreshToken); // Keep the same refresh_token
-        accessToken = refreshData.access_token;
-
-        headers.set('Authorization', `Bearer ${accessToken}`);
-
-        // Retry the original request
-        return apiClient(url, { ...options, headers, retry: true });
+        // Token is refreshed — try the original request again
+        return apiClient(url, { ...options, retry: true });
       } else {
         clearTokens();
         throw new Error('Session expired. Please login again.');
