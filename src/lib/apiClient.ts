@@ -1,5 +1,4 @@
-// src/lib/apiClient.ts
-import { getRefreshToken, clearTokens } from '@/lib/auth'; // No getAccessToken anymore
+import { API } from './api';
 
 interface FetchOptions extends RequestInit {
   retry?: boolean; // Prevent infinite retry loop
@@ -15,31 +14,24 @@ export const apiClient = async (url: string, options: FetchOptions = {}): Promis
     const response = await fetch(url, { ...options, headers, credentials: 'include' }); // ✅ add credentials: "include"
 
     if (response.status === 401 && !options.retry) {
-      const refreshToken = getRefreshToken();
-      if (!refreshToken) {
-        clearTokens();
-        throw new Error('No refresh token available.');
-      }
-
-      const refreshRes = await fetch('/api/auth/refresh', {
+      const refreshRes = await fetch(API.REFRESH, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ refresh_token: refreshToken }),
-        credentials: 'include', // ✅ make sure cookies are sent
+        credentials: 'include',
       });
 
       if (refreshRes.ok) {
-        // Token refreshed, try the original request again
         return apiClient(url, { ...options, retry: true });
       } else {
-        clearTokens();
-        throw new Error('Session expired. Please login again.');
+        // session is expired
+        const path = window.location.pathname + window.location.search;
+        sessionStorage.setItem('redirectAfterLogin', path);
+        window.location.href = '/auth/login';
+        return response;
       }
     }
 
     return response;
   } catch (error) {
-    console.error('API Client Error:', error);
     throw error;
   }
 };

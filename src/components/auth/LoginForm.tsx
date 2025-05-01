@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { saveTokens } from '@/lib/auth';
+import { API } from '@/lib/api';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
@@ -18,18 +18,21 @@ export default function LoginForm() {
     }
 
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch(API.LOGIN, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
+        credentials: 'include', // ✅ sends and receives cookies
       });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data?.error || 'Login failed.');
-        return;
+
+      if (res.ok) {
+        const redirectPath = sessionStorage.getItem('redirectAfterLogin') || '/';
+        sessionStorage.removeItem('redirectAfterLogin');
+        window.location.href = redirectPath;
+      } else {
+        const errorData = await res.json();
+        setError(errorData?.error || 'Login failed.');
       }
-      saveTokens('', data.refresh_token); // ✅ Only store refresh token
-      window.location.href = '/';
     } catch (err) {
       setError('Something went wrong. Please try again.');
     }
