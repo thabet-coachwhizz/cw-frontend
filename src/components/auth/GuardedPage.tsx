@@ -4,6 +4,7 @@
 import { useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
+import Loader from '@/components/ui/Loader';
 
 export default function GuardedPage({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -15,7 +16,7 @@ export default function GuardedPage({ children }: { children: React.ReactNode })
     }
   }, [loading, user]);
 
-  if (loading) return <div className="p-4">Loading...</div>;
+  if (loading) return <Loader message="Redirecting..." />;
 
   if (user) return null;
 

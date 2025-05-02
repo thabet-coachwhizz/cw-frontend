@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Loader from '@/components/ui/Loader';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, loading, logout } = useAuth();
@@ -21,7 +22,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   }, [loading, user]);
 
   if (loading || (!user && typeof window !== 'undefined')) {
-    return <div className="p-4">Loading...</div>;
+    return <Loader message="Checking authentication..." />;
   }
 
   if (!user) return null; // layout is wrapped in auth-only route
