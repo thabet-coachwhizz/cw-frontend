@@ -2,11 +2,15 @@
 
 import { useState } from 'react';
 import { API } from '@/lib/api';
+import { useRedirectAfterLogin } from '@/hooks/useRedirectAfterLogin';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loginSuccess, setLoginSuccess] = useState(false);
+
+  useRedirectAfterLogin(loginSuccess);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,9 +30,7 @@ export default function LoginForm() {
       });
 
       if (res.ok) {
-        const redirectPath = sessionStorage.getItem('redirectAfterLogin') || '/';
-        sessionStorage.removeItem('redirectAfterLogin');
-        window.location.href = redirectPath;
+        setLoginSuccess(true); // trigger redirect via hook
       } else {
         const errorData = await res.json();
         setError(errorData?.error || 'Login failed.');

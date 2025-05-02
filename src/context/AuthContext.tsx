@@ -10,6 +10,7 @@ interface User {
   id: string;
   email: string;
   name?: string;
+  roles?: string[];
 }
 
 interface AuthContextType {
@@ -27,18 +28,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await apiClient(API.PROFILE, {
+        const res = await apiClient(API.AUTH_SESSION, {
           method: 'GET',
         });
         if (res.ok) {
-          const data = await res.json();
-          setUser(data);
+          const result = await res.json();
+          if (result.isAuthenticated) {
+            setUser(result.user);
+          } else {
+            setUser(null);
+          }
         } else {
           setUser(null);
         }
       } catch {
+        console.log('Catch and the Loading:', loading);
         setUser(null);
       } finally {
+        console.log('set Loading False');
         setLoading(false);
       }
     };
