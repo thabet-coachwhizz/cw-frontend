@@ -45,7 +45,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         console.log('Catch and the Loading:', loading);
         setUser(null);
       } finally {
-        console.log('set Loading False');
         setLoading(false);
       }
     };
