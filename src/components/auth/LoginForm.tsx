@@ -23,6 +23,7 @@ export default function LoginForm() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSubmitting(true);
 
     if (!isValidEmail(email) || password.length < 8) {
       setError('Please enter a valid email and a password with at least 8 characters.');
@@ -58,9 +59,11 @@ export default function LoginForm() {
   const handleNewPasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSubmitting(true);
 
     if (newPassword !== confirmPassword) {
       setError('Passwords do not match.');
+      setSubmitting(false);
       return;
     }
     if (newPassword.length < 8) {
@@ -87,6 +90,8 @@ export default function LoginForm() {
       }
     } catch {
       setError('Something went wrong. Please try again.');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -116,7 +121,7 @@ export default function LoginForm() {
           </div>
           {error && <p className="text-red-600">{error}</p>}
           <button type="submit" className="btn btn-primary w-full" disabled={submitting}>
-            Sign In
+            {submitting ? 'Logging in...' : 'Sign In'}
           </button>
           <p className="text-sm text-center text-muted-foreground mt-2">
             <Link href="/auth/reset" className="text-blue-600 underline hover:text-blue-800">
@@ -149,7 +154,7 @@ export default function LoginForm() {
           </div>
           {error && <p className="text-red-600">{error}</p>}
           <button type="submit" className="btn btn-primary w-full" disabled={submitting}>
-            Update Password
+            {submitting ? 'Updating Password...' : 'Update Password'}
           </button>
         </form>
       )}

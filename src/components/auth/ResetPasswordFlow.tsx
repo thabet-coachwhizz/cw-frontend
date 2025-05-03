@@ -13,14 +13,17 @@ export default function ResetPasswordFlow() {
   const [newPassword, setNewPassword] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   const handleRequest = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setMessage('');
+    setSubmitting(true);
 
     if (!isValidEmail(email)) {
       setError('Please enter a valid email address.');
+      setSubmitting(false);
       return;
     }
 
@@ -32,13 +35,16 @@ export default function ResetPasswordFlow() {
       });
 
       if (res.ok) {
-        setStep('confirm');
+        setMessage('Reset code sent to your email if the user exists.');
+        setTimeout(() => setStep('confirm'), 1500); // ✅ wait before switching UI
       } else {
         const data = await res.json();
         setError(data.error || 'Request failed.');
       }
     } catch {
       setError('Something went wrong. Please try again.');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -46,9 +52,11 @@ export default function ResetPasswordFlow() {
     e.preventDefault();
     setError('');
     setMessage('');
+    setSubmitting(true);
 
     if (!code || newPassword.length < 8) {
       setError('Code is required and password must be at least 8 characters.');
+      setSubmitting(false);
       return;
     }
 
@@ -71,6 +79,8 @@ export default function ResetPasswordFlow() {
       }
     } catch {
       setError('Something went wrong. Please try again.');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -79,6 +89,7 @@ export default function ResetPasswordFlow() {
       {step === 'request' && (
         <form onSubmit={handleRequest} className="space-y-4">
           <h2 className="text-lg font-semibold">Reset Your Password</h2>
+
           <input
             type="email"
             value={email}
@@ -88,7 +99,8 @@ export default function ResetPasswordFlow() {
             className="w-full rounded border border-gray-400 p-2 dark:bg-zinc-900 dark:text-white"
           />
           {error && <p className="text-red-600 text-sm">{error}</p>}
-          <button type="submit" className="btn btn-primary w-full">
+          {<p className=" text-sm text-green-700">{message}</p>}
+          <button type="submit" className="btn btn-primary w-full" disabled={submitting}>
             Request Reset Code
           </button>
         </form>
@@ -114,7 +126,7 @@ export default function ResetPasswordFlow() {
             className="w-full rounded border border-gray-400 p-2 dark:bg-zinc-900 dark:text-white"
           />
           {error && <p className="text-red-600 text-sm">{error}</p>}
-          <button type="submit" className="btn btn-primary w-full">
+          <button type="submit" className="btn btn-primary w-full" disabled={submitting}>
             Confirm Reset
           </button>
         </form>
