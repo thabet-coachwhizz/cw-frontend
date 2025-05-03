@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { API } from '@/lib/api';
 import { useRedirectAfterLogin } from '@/hooks/useRedirectAfterLogin';
+import Link from 'next/link';
+import { isValidEmail } from '@/lib/validators';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
@@ -16,7 +18,7 @@ export default function LoginForm() {
     e.preventDefault();
     setError('');
 
-    if (!email.includes('@') || password.length < 8) {
+    if (!isValidEmail(email) || password.length < 8) {
       setError('Please enter a valid email and a password with at least 8 characters.');
       return;
     }
@@ -66,6 +68,11 @@ export default function LoginForm() {
       <button type="submit" className="btn btn-primary w-full">
         Sign In
       </button>
+      <p className="text-sm text-center text-muted-foreground mt-2">
+        <Link href="/auth/reset" className="text-blue-600 underline hover:text-blue-800">
+          Forgot your password?
+        </Link>
+      </p>
     </form>
   );
 }
