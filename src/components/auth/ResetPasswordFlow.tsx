@@ -4,7 +4,11 @@
 import { useState } from 'react';
 import { API } from '@/lib/api';
 import { isValidEmail } from '@/lib/validators';
-import Link from 'next/link';
+import Link from '@/components/ui/Link';
+import Form from '@/components/ui/Form';
+import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
+import Alert from '@/components/ui/Alert';
 
 export default function ResetPasswordFlow() {
   const [step, setStep] = useState<'request' | 'confirm' | 'success'>('request');
@@ -87,59 +91,59 @@ export default function ResetPasswordFlow() {
   return (
     <div className="space-y-6 max-w-md mx-auto">
       {step === 'request' && (
-        <form onSubmit={handleRequest} className="space-y-4">
+        <>
           <h2 className="text-lg font-semibold">Reset Your Password</h2>
-
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            required
-            className="w-full rounded border border-gray-400 p-2 dark:bg-zinc-900 dark:text-white"
-          />
-          {error && <p className="text-red-600 text-sm">{error}</p>}
-          {<p className=" text-sm text-green-700">{message}</p>}
-          <button type="submit" className="btn btn-primary w-full" disabled={submitting}>
-            Request Reset Code
-          </button>
-        </form>
+          <Form onSubmit={handleRequest} error={error} message={message} disabled={submitting}>
+            <Input
+              type="email"
+              label="Email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <Button type="submit" loading={submitting} className="w-full">
+              Request Reset Code
+            </Button>
+          </Form>
+        </>
       )}
 
       {step === 'confirm' && (
-        <form onSubmit={handleConfirm} className="space-y-4">
+        <>
           <h2 className="text-lg font-semibold">Enter Verification Code</h2>
-          <input
-            type="text"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            placeholder="Verification Code"
-            required
-            className="w-full rounded border border-gray-400 p-2 dark:bg-zinc-900 dark:text-white"
-          />
-          <input
-            type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="New Password"
-            required
-            className="w-full rounded border border-gray-400 p-2 dark:bg-zinc-900 dark:text-white"
-          />
-          {error && <p className="text-red-600 text-sm">{error}</p>}
-          <button type="submit" className="btn btn-primary w-full" disabled={submitting}>
-            Confirm Reset
-          </button>
-        </form>
+          <Form onSubmit={handleConfirm} error={error} disabled={submitting}>
+            <Input
+              type="text"
+              label="Verification Code"
+              placeholder="Verification Code"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              required
+            />
+            <Input
+              type="password"
+              label="New Password"
+              placeholder="New Password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+            />
+            <Button type="submit" loading={submitting} className="w-full">
+              Confirm Reset
+            </Button>
+          </Form>
+        </>
       )}
 
       {step === 'success' && (
-        <div className="text-center space-y-4">
-          <h2 className="text-lg font-semibold text-green-700">Password reset successful.</h2>
-          <p>You can now log in with your new password.</p>
-          <Link href="/auth/login" className="text-blue-600 underline">
-            Go to Login
-          </Link>
-        </div>
+        <>
+          <div className="text-center space-y-4">
+            <Alert type="success" message="Password reset successful." />
+            <p>You can now log in with your new password.</p>
+            <Link href="/auth/login">Go to Login</Link>
+          </div>
+        </>
       )}
     </div>
   );

@@ -3,8 +3,12 @@
 import { useState } from 'react';
 import { API } from '@/lib/api';
 import { useRedirectAfterLogin } from '@/hooks/useRedirectAfterLogin';
-import Link from 'next/link';
 import { isValidEmail } from '@/lib/validators';
+
+import Form from '@/components/ui/Form';
+import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
+import Link from '@/components/ui/Link';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
@@ -68,6 +72,7 @@ export default function LoginForm() {
     }
     if (newPassword.length < 8) {
       setError('New password must be at least 8 characters.');
+      setSubmitting(false);
       return;
     }
 
@@ -98,65 +103,55 @@ export default function LoginForm() {
   return (
     <div className="space-y-6 max-w-md mx-auto">
       {!challengeRequired ? (
-        <form onSubmit={handleLogin} className="space-y-6">
-          <div>
-            <label className="block mb-1 font-medium">Email</label>
-            <input
+        <>
+          <h1 className="text-xl font-bold mb-4">Login to CoachWhizz</h1>
+          <Form onSubmit={handleLogin} error={error} disabled={submitting}>
+            <Input
               type="email"
-              required
+              label="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded border border-gray-400 p-2 dark:bg-zinc-900 dark:text-white"
-            />
-          </div>
-          <div>
-            <label className="block mb-1 font-medium">Password</label>
-            <input
-              type="password"
               required
+            />
+            <Input
+              type="password"
+              label="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded border border-gray-400 p-2 dark:bg-zinc-900 dark:text-white"
-            />
-          </div>
-          {error && <p className="text-red-600">{error}</p>}
-          <button type="submit" className="btn btn-primary w-full" disabled={submitting}>
-            {submitting ? 'Logging in...' : 'Sign In'}
-          </button>
-          <p className="text-sm text-center text-muted-foreground mt-2">
-            <Link href="/auth/reset" className="text-blue-600 underline hover:text-blue-800">
-              Forgot your password?
-            </Link>
-          </p>
-        </form>
-      ) : (
-        <form onSubmit={handleNewPasswordSubmit} className="space-y-6">
-          <p className="text-sm text-gray-700 text-center">Your account requires a new password.</p>
-          <div>
-            <label className="block mb-1 font-medium">New Password</label>
-            <input
-              type="password"
               required
+            />
+            <Button type="submit" loading={submitting} className="w-full mt-4">
+              Request Reset Code
+            </Button>
+
+            <p className="text-sm text-center text-muted-foreground mt-2">
+              <Link href="/auth/reset">Forgot your password?</Link>
+            </p>
+          </Form>
+        </>
+      ) : (
+        <>
+          <Form onSubmit={handleNewPasswordSubmit} error={error} disabled={submitting}>
+            <h1 className="text-xl font-bold mb-4">Your account requires a new password.</h1>
+            <Input
+              type="password"
+              label="New Password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full rounded border border-gray-400 p-2 dark:bg-zinc-900 dark:text-white"
-            />
-          </div>
-          <div>
-            <label className="block mb-1 font-medium">Confirm New Password</label>
-            <input
-              type="password"
               required
+            />
+            <Input
+              type="password"
+              label="New Password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full rounded border border-gray-400 p-2 dark:bg-zinc-900 dark:text-white"
+              required
             />
-          </div>
-          {error && <p className="text-red-600">{error}</p>}
-          <button type="submit" className="btn btn-primary w-full" disabled={submitting}>
-            {submitting ? 'Updating Password...' : 'Update Password'}
-          </button>
-        </form>
+            <Button type="submit" loading={submitting} className="w-full mt-4">
+              Update Password
+            </Button>
+          </Form>
+        </>
       )}
     </div>
   );
