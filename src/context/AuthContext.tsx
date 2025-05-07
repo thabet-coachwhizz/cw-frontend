@@ -3,17 +3,10 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { apiClient } from '@/lib/apiClient';
 import { API } from '@/lib/api';
 import toast from 'react-hot-toast';
-
-interface User {
-  id: string;
-  email: string;
-  name?: string;
-  roles?: string[];
-  onboarding_status?: 'not_started' | 'in_progress' | 'completed';
-}
+import { User } from '@/types/user';
+import { getSession } from '@/lib/api/auth';
 
 interface AuthContextType {
   user: User | null;
@@ -29,14 +22,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const router = useRouter();
   const pathname = usePathname();
-
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const result = await apiClient.get(API.AUTH_SESSION);
+        const result = await getSession();
         if (result.isAuthenticated) {
-          const user = result.user;
-          setUser(user);
+          const u = result.user;
+          setUser(u);
         } else {
           setUser(null);
         }

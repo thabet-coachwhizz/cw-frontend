@@ -14,7 +14,7 @@ export default function GuardedPage({ children }: { children: React.ReactNode })
     if (!loading && user) {
       router.replace('/');
     }
-  }, [loading, user]);
+  }, [loading, user, router]);
 
   if (loading) return <Loader message="Redirecting..." />;
 

@@ -2,6 +2,7 @@
 
 import clsx from 'clsx';
 import Link from '@/components/ui/Link';
+import { OnboardingProgress } from '@/types/user';
 
 interface AssessmentStep {
   step: number;
@@ -13,13 +14,7 @@ interface AssessmentStep {
 }
 
 interface Props {
-  progress: {
-    percent_complete: number;
-    profile_completed: boolean;
-    personality_done: boolean;
-    values_done: boolean;
-    passions_done: boolean;
-  };
+  progress: OnboardingProgress;
 }
 
 const ASSESSMENTS: AssessmentStep[] = [

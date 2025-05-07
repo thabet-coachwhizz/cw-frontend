@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Loader from '@/components/ui/Loader';
+import Button from '@/components/ui/Button';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, loading, logout } = useAuth();
@@ -19,7 +20,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       );
       router.replace('/auth/login');
     }
-  }, [loading, user]);
+  }, [loading, user, router]);
 
   if (loading || (!user && typeof window !== 'undefined')) {
     return <Loader message="Checking authentication..." />;
@@ -36,9 +37,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Link href="/#test?d=2">Test 1</Link>
           <Link href="/#test?d=3">Test 2</Link>
         </div>
-        <button className="underline text-blue-600" onClick={logout}>
-          Logout
-        </button>
+        <Button onClick={logout}>Logout</Button>
       </header>
       <main>{children}</main>
     </>

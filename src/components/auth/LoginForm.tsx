@@ -53,7 +53,7 @@ export default function LoginForm() {
       } else {
         setError(result?.error || 'Login failed.');
       }
-    } catch (err) {
+    } catch {
       setError('Something went wrong. Please try again.');
     } finally {
       setSubmitting(false);
@@ -121,7 +121,7 @@ export default function LoginForm() {
               required
             />
             <Button type="submit" loading={submitting} className="w-full mt-4">
-              Request Reset Code
+              Login
             </Button>
 
             <p className="text-sm text-center text-muted-foreground mt-2">
