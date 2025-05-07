@@ -35,3 +35,30 @@ export const apiClient = async (url: string, options: FetchOptions = {}): Promis
     throw error;
   }
 };
+
+// REST-style helpers
+apiClient.get = async (url: string) => {
+  const res = await apiClient(url, { method: 'GET', credentials: 'include' });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+};
+
+apiClient.post = async (url: string, data?: Record<string, unknown>) => {
+  const res = await apiClient(url, {
+    method: 'POST',
+    body: JSON.stringify(data),
+    credentials: 'include',
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+};
+
+apiClient.put = async (url: string, data?: Record<string, unknown>) => {
+  const res = await apiClient(url, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+    credentials: 'include',
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+};

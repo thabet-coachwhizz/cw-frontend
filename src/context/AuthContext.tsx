@@ -2,6 +2,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { apiClient } from '@/lib/apiClient';
 import { API } from '@/lib/api';
 import toast from 'react-hot-toast';
@@ -11,6 +12,7 @@ interface User {
   email: string;
   name?: string;
   roles?: string[];
+  onboarding_status?: 'not_started' | 'in_progress' | 'completed';
 }
 
 interface AuthContextType {
@@ -25,24 +27,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const router = useRouter();
+  const pathname = usePathname();
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await apiClient(API.AUTH_SESSION, {
-          method: 'GET',
-        });
-        if (res.ok) {
-          const result = await res.json();
-          if (result.isAuthenticated) {
-            setUser(result.user);
-          } else {
-            setUser(null);
-          }
+        const result = await apiClient.get(API.AUTH_SESSION);
+        if (result.isAuthenticated) {
+          const user = result.user;
+          setUser(user);
         } else {
           setUser(null);
         }
       } catch {
-        console.log('Catch and the Loading:', loading);
         setUser(null);
       } finally {
         setLoading(false);
@@ -50,6 +48,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
     fetchUser();
   }, []);
+
+  // a separate useEffect that only runs when both user and loading are ready
+  useEffect(() => {
+    if (loading || !user) return;
+    handleOnboardingRedirect(user, pathname, router);
+  }, [loading, user, pathname, router]);
 
   const logout = async () => {
     try {
@@ -72,4 +76,21 @@ export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) throw new Error('useAuth must be used within AuthProvider');
   return context;
+}
+
+function handleOnboardingRedirect(
+  user: User,
+  pathname: string,
+  router: ReturnType<typeof useRouter>,
+) {
+  const isOnboardingPage = pathname.startsWith('/onboarding');
+  const onboardingRequired = user.onboarding_status !== 'completed';
+
+  if (onboardingRequired && !isOnboardingPage) {
+    router.replace('/onboarding');
+  }
+
+  if (!onboardingRequired && isOnboardingPage) {
+    router.replace('/'); // go to home page
+  }
 }

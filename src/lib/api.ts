@@ -9,4 +9,5 @@ export const API = {
   RESET_PASSWORD_REQUEST: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/reset-password/request/`,
   RESET_PASSWORD_CONFIRM: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/reset-password/confirm/`,
   CONFIRM_NEW_PASSWORD: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/confirm-new-password/`,
+  ONBOARDING_PROGRESS: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/onboarding/progress/`,
 };
