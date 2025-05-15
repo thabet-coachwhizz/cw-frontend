@@ -7,11 +7,13 @@ import { API } from '@/lib/api';
 import toast from 'react-hot-toast';
 import { User } from '@/types/user';
 import { getSession } from '@/lib/api/auth';
+import { bindUserRefresher } from '@/lib/apiClient';
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   logout: () => void;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -22,13 +24,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const router = useRouter();
   const pathname = usePathname();
+
+  const refreshUser = async () => {
+    try {
+      const result = await getSession();
+      if (result.isAuthenticated) {
+        setUser(result.user);
+      } else {
+        setUser(null);
+      }
+    } catch {
+      setUser(null);
+    }
+  };
+  useEffect(() => {
+    // Register refreshUser with apiClient to allow optional auto-refresh after POST
+    bindUserRefresher(refreshUser);
+  }, []);
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const result = await getSession();
         if (result.isAuthenticated) {
-          const u = result.user;
-          setUser(u);
+          setUser(result.user);
         } else {
           setUser(null);
         }
@@ -41,7 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     fetchUser();
   }, []);
 
-  // a separate useEffect that only runs when both user and loading are ready
+  // Auto-redirect based on onboarding status after user loads
   useEffect(() => {
     if (loading || !user) return;
     handleOnboardingRedirect(user, pathname, router);
@@ -61,7 +79,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  return <AuthContext.Provider value={{ user, loading, logout }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ user, loading, logout, refreshUser }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
@@ -70,14 +92,18 @@ export function useAuth() {
   return context;
 }
 
+/**
+ * Redirects the user to the correct onboarding step or dashboard
+ * depending on their onboarding_status and current page location.
+ */
 function handleOnboardingRedirect(
   user: User,
   pathname: string,
   router: ReturnType<typeof useRouter>,
 ) {
-  const isOnboardingPage = pathname.startsWith('/onboarding');
+  const isOnboardingPage =
+    pathname.startsWith('/onboarding') || pathname.startsWith('/assessments');
   const onboardingRequired = user.onboarding_status !== 'completed';
-
   if (onboardingRequired && !isOnboardingPage) {
     router.replace('/onboarding');
   }

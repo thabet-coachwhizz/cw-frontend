@@ -30,15 +30,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <header className="p-4 flex justify-between items-center border-b">
-        <span className="font-medium">👤 {user.email}</span>
-        <div>
-          <Link href="/">Home</Link>
-          <Link href="/#test?d=2">Test 1</Link>
-          <Link href="/#test?d=3">Test 2</Link>
-        </div>
-        <Button onClick={logout}>Logout</Button>
-      </header>
+      {user?.onboarding_status === 'completed' && (
+        <header className="p-4 flex justify-between items-center border-b">
+          <span className="font-medium">👤 {user.email}</span>
+          <div>
+            <Link href="/">Home</Link>
+            <Link href="/#test?d=2">Test 1</Link>
+            <Link href="/#test?d=3">Test 2</Link>
+          </div>
+          <Button onClick={logout}>Logout</Button>
+        </header>
+      )}
       <main>{children}</main>
     </>
   );

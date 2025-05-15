@@ -2,56 +2,16 @@
 
 import clsx from 'clsx';
 import Link from '@/components/ui/Link';
-import { OnboardingProgress } from '@/types/user';
-
-interface AssessmentStep {
-  step: number;
-  name: string;
-  description: string;
-  done: boolean;
-  required: boolean;
-  slug: string;
-}
+import { AssessmentStepState, OnboardingProgress } from '@/types/onboarding';
 
 interface Props {
+  steps: AssessmentStepState[];
   progress: OnboardingProgress;
 }
 
-const ASSESSMENTS: AssessmentStep[] = [
-  {
-    step: 1,
-    name: 'Personality Assessment',
-    description: 'Curiosity, Imagination, Innovation',
-    done: false,
-    required: true,
-    slug: 'personality',
-  },
-  {
-    step: 2,
-    name: 'Core Values',
-    description: 'What matters most to you?',
-    done: false,
-    required: false,
-    slug: 'values',
-  },
-  {
-    step: 3,
-    name: 'Career Passions',
-    description: 'What drives you at work?',
-    done: false,
-    required: false,
-    slug: 'passions',
-  },
-];
-
-export default function OnboardingTimeline({ progress }: Props) {
-  const assessments = ASSESSMENTS.map((step) => ({
-    ...step,
-    done: progress[`${step.slug.replace('-', '_')}_done` as keyof typeof progress] === true,
-  }));
-
-  const next = assessments.find((step) => !step.done);
-
+export default function OnboardingTimeline({ steps, progress }: Props) {
+  const next = steps.find((step) => step.status == 'not_started');
+  const nextIndex = steps.findIndex((s) => s.status === 'not_started');
   return (
     <div className="space-y-8">
       {/* Progress header */}
@@ -70,9 +30,8 @@ export default function OnboardingTimeline({ progress }: Props) {
 
       {/* Timeline */}
       <div className="relative border-dashed border-gray-300 pl-4">
-        {assessments.map((step, i) => {
-          const noStepsDone = assessments.every((s) => !s.done);
-          const isCurrent = noStepsDone ? i === 0 : !step.done && assessments[i - 1]?.done;
+        {steps.map((step, i) => {
+          const isCurrent = i === nextIndex;
 
           return (
             <div key={step.step} className="relative pb-6 pt-1 pl-4">
@@ -81,21 +40,30 @@ export default function OnboardingTimeline({ progress }: Props) {
                 <div
                   className={clsx(
                     'w-4 h-4 rounded-full border-2',
-                    step.done
-                      ? 'bg-blue-600 border-blue-600'
-                      : isCurrent
-                        ? 'border-5 border-blue-600 bg-white'
-                        : 'border-gray-300',
+
+                    {
+                      'bg-blue-600 border-blue-600': step.status === 'completed',
+                      'border-5  border-red-600 bg-white': step.status === 'skipped',
+                      'border-5 border-blue-600 bg-white': isCurrent,
+                      'border-gray-300':
+                        !isCurrent && step.status !== 'completed' && step.status !== 'skipped',
+                    },
                   )}
                 ></div>
               </div>
 
               {/* Step content */}
               <div
-                className={clsx(
-                  'flex justify-between text-base',
-                  isCurrent || step.done ? 'text-black' : 'text-gray-400',
-                )}
+                className={clsx('flex justify-between text-base', {
+                  'text-black': isCurrent || (step.required && step.status !== 'completed'),
+                  'text-blue-600': step.status === 'completed',
+                  'text-red-600': step.status === 'skipped',
+                  'text-gray-400':
+                    !isCurrent &&
+                    !step.required &&
+                    step.status !== 'completed' &&
+                    step.status !== 'skipped',
+                })}
               >
                 <div>
                   <h3 className={clsx('text-sm font-semibold')}>Step {step.step}</h3>
@@ -103,16 +71,20 @@ export default function OnboardingTimeline({ progress }: Props) {
                   <p className={clsx('text-sm')}>{step.description}</p>
                 </div>
                 <span className={clsx('text-xs mt-1 font-medium')}>
-                  {step.required ? 'Required' : 'Optional'}
+                  {step.status == 'not_started'
+                    ? step.required
+                      ? 'Required'
+                      : 'Optional'
+                    : step.status}
                 </span>
               </div>
 
               {/* Connector */}
-              {i < assessments.length - 1 && (
+              {i < steps.length - 1 && (
                 <div
                   className={clsx(
                     'absolute left-0 top-4 h-full border-l border-dashed ',
-                    step.done ? 'border-blue-600' : 'border-gray-300',
+                    step.status == 'completed' ? 'border-blue-600' : 'border-gray-300',
                   )}
                 />
               )}
@@ -124,7 +96,11 @@ export default function OnboardingTimeline({ progress }: Props) {
       {/* CTA Button */}
       {next && (
         <div className="pt-4">
-          <Link href={`/assessments/${next.slug}`} variant="primary" className="w-full text-center">
+          <Link
+            href={`/assessments/${next.slug}/start`}
+            variant="primary"
+            className="w-full text-center"
+          >
             Take the {next.name}
           </Link>
         </div>

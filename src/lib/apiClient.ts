@@ -36,6 +36,12 @@ export const apiClient = async (url: string, options: FetchOptions = {}): Promis
   }
 };
 
+// --- Optional user refresher hook ---
+let cachedRefreshUser: (() => Promise<void>) | null = null;
+export function bindUserRefresher(refreshFn: () => Promise<void>) {
+  cachedRefreshUser = refreshFn;
+}
+
 // REST-style helpers
 apiClient.get = async (url: string) => {
   const res = await apiClient(url, { method: 'GET', credentials: 'include' });
@@ -43,14 +49,24 @@ apiClient.get = async (url: string) => {
   return res.json();
 };
 
-apiClient.post = async (url: string, data?: Record<string, unknown>) => {
+apiClient.post = async (
+  url: string,
+  data?: Record<string, unknown>,
+  refreshUserOnSuccess: boolean = false,
+) => {
   const res = await apiClient(url, {
     method: 'POST',
     body: JSON.stringify(data),
     credentials: 'include',
   });
   if (!res.ok) throw new Error(await res.text());
-  return res.json();
+  const json = await res.json();
+
+  if (refreshUserOnSuccess && cachedRefreshUser) {
+    await cachedRefreshUser();
+  }
+
+  return json;
 };
 
 apiClient.put = async (url: string, data?: Record<string, unknown>) => {
