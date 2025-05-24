@@ -103,7 +103,7 @@ export function PairwiseSorter({ items, onSorted, title }: PairwiseSorterProps) 
 
       <div className="flex flex-col sm:flex-row gap-4">
         <div
-          className="cursor-pointer border rounded-xl p-4 flex-1 hover:border-blue-500"
+          className="cursor-pointer border rounded-xl p-4 flex-1 hover:border-[#08B1C7] hover:bg-[#292A38]"
           onClick={() => handleSelect('left')}
         >
           <h3 className="font-semibold">{currentLeft.title}</h3>
@@ -113,7 +113,7 @@ export function PairwiseSorter({ items, onSorted, title }: PairwiseSorterProps) 
         </div>
 
         <div
-          className="cursor-pointer border rounded-xl p-4 flex-1 hover:border-blue-500"
+          className="cursor-pointer border rounded-xl p-4 flex-1 hover:border-[#08B1C7] hover:bg-[#292A38]"
           onClick={() => handleSelect('right')}
         >
           <h3 className="font-semibold">{currentRight.title}</h3>

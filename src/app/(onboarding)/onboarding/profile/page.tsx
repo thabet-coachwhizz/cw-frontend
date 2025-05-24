@@ -21,8 +21,8 @@ export default function ProfileStep() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
-      <div className="w-full max-w-3xl bg-white p-8 rounded shadow">
+    <main className="min-h-screen flex items-center justify-center p-4">
+      <div className="w-full max-w-3xl p-8 rounded shadow">
         <ProfileForm onSubmit={handleSubmit} loading={submitting} />
       </div>
     </main>

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { updateGoal } from '@/lib/api/onboarding';
 import Button from '@/components/ui/Button';
+import Textarea from '@/components/ui/Textarea';
 
 export default function GoalPage() {
   const [goal, setGoal] = useState('');
@@ -25,19 +26,22 @@ export default function GoalPage() {
   return (
     <div className="max-w-xl mx-auto space-y-6 p-6">
       <h1 className="text-2xl font-bold">Where Are You Headed in 12 months?</h1>
-      <p className="text-gray-600">
-        Fast forward 12 months—what does career success look like for you? Are you leading a
-        project, mastering a new skill, or stepping into a new role?
-      </p>
 
-      <textarea
-        className="w-full border rounded-lg p-3 text-sm min-h-[120px]"
+      <Textarea
+        label=" Fast forward 12 months—what does career success look like for you? Are you leading a
+        project, mastering a new skill, or stepping into a new role?"
+        className="min-h-[120px] border-1 border-black mt-2"
         placeholder="Compromise to maintain team harmony."
         value={goal}
         onChange={(e) => setGoal(e.target.value)}
       />
 
-      <Button onClick={handleFinish} loading={submitting} disabled={!goal.trim() || submitting}>
+      <Button
+        onClick={handleFinish}
+        loading={submitting}
+        disabled={!goal.trim() || submitting}
+        className="w-full"
+      >
         Finish
       </Button>
     </div>

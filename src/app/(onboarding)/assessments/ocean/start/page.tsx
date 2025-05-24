@@ -73,44 +73,46 @@ export default function OceanAssessmentPage() {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <AssessmentStepper
-        assessments={flow.steps.map((s, i) => ({
-          slug: s.slug,
-          label: s.name,
-          status: s.status,
-          stepNumber: i + 1,
-        }))}
-        currentSlug={slug}
-      />
-
-      {step === 'intro' ? (
-        <AssessmentIntro
-          assessment={assessment}
-          isFirst
-          onStart={() => setStep('questions')}
-          onSkip={skipCurrent}
+    <div className="flex items-center justify-center p-8">
+      <div className="p-8 space-y-6 w-full max-w-3xl rounded-xl shadow bg-[#333546]">
+        <AssessmentStepper
+          assessments={flow.steps.map((s, i) => ({
+            slug: s.slug,
+            label: s.name,
+            status: s.status,
+            stepNumber: i + 1,
+          }))}
+          currentSlug={slug}
         />
-      ) : (
-        <>
-          <AssessmentQuestion
-            index={currentIndex}
-            total={questions.length}
-            question={questions[currentIndex]}
-            selected={answers[questions[currentIndex].id] || null}
-            onChange={handleAnswer}
+
+        {step === 'intro' ? (
+          <AssessmentIntro
+            assessment={assessment}
+            isFirst
+            onStart={() => setStep('questions')}
+            onSkip={skipCurrent}
           />
-          {error && <div className="text-sm text-red-600">{error}</div>}
-          <AssessmentFooter
-            isFirst={currentIndex === 0}
-            isLast={currentIndex === questions.length - 1}
-            onBack={handleBack}
-            onNext={handleNext}
-            onFinish={handleFinish}
-            submitting={submitting}
-          />
-        </>
-      )}
+        ) : (
+          <>
+            <AssessmentQuestion
+              index={currentIndex}
+              total={questions.length}
+              question={questions[currentIndex]}
+              selected={answers[questions[currentIndex].id] || undefined}
+              onChange={handleAnswer}
+            />
+            {error && <div className="text-sm text-[#EE7777]">{error}</div>}
+            <AssessmentFooter
+              isFirst={currentIndex === 0}
+              isLast={currentIndex === questions.length - 1}
+              onBack={handleBack}
+              onNext={handleNext}
+              onFinish={handleFinish}
+              submitting={submitting}
+            />
+          </>
+        )}
+      </div>
     </div>
   );
 }

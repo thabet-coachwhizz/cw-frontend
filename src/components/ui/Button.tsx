@@ -33,11 +33,11 @@ export default function Button({
       type={type}
       disabled={disabled || loading}
       className={clsx(
-        'rounded px-4 py-2 font-medium transition',
+        'rounded-xl px-4 py-2 font-medium transition hover:cursor-pointer',
         {
-          primary: 'bg-blue-600 text-white hover:bg-blue-700',
-          secondary: 'bg-gray-200 text-black hover:bg-gray-300',
-          outline: 'border border-gray-500 text-black',
+          primary: 'bg-[#08B1C7] text-white shadow-lg shadow-[#08B1C724] hover:bg-[#089EB3]',
+          secondary: 'bg-[#CBCED9] text-[#333546] ',
+          outline: 'bg-none text-[#73798F] border-[#F5F5F5] border-1',
         }[variant],
         disabled && 'opacity-50 cursor-not-allowed',
         className,

@@ -19,7 +19,7 @@ export default function Label({
   children: React.ReactNode;
 }) {
   return (
-    <label htmlFor={htmlFor} className="block text-sm font-medium text-gray-700">
+    <label htmlFor={htmlFor} className="block text-base font-semibold leading-6 text-[#BBBBC0]">
       {children}
     </label>
   );

@@ -17,12 +17,12 @@ export default function OnboardingTimeline({ steps, progress }: Props) {
       {/* Progress header */}
       <div>
         <div className="flex justify-between items-center mb-2">
-          <span className="font-medium text-gray-800">Progress</span>
-          <span className="text-sm text-gray-600">{progress.percent_complete}% completed</span>
+          <span className="font-medium ">Progress</span>
+          <span className="text-sm ">{progress.percent_complete}% completed</span>
         </div>
         <div className="h-2 rounded bg-gray-200 overflow-hidden">
           <div
-            className="h-full bg-blue-600 transition-all duration-300"
+            className="h-full bg-[#08B1C7] transition-all duration-300"
             style={{ width: `${progress.percent_complete}%` }}
           />
         </div>
@@ -42,9 +42,9 @@ export default function OnboardingTimeline({ steps, progress }: Props) {
                     'w-4 h-4 rounded-full border-2',
 
                     {
-                      'bg-blue-600 border-blue-600': step.status === 'completed',
-                      'border-5  border-red-600 bg-white': step.status === 'skipped',
-                      'border-5 border-blue-600 bg-white': isCurrent,
+                      'bg-[#08B1C7] border-[#08B1C7]': step.status === 'completed',
+                      'border-5  border-[#EE7777] bg-white': step.status === 'skipped',
+                      'border-5 border-[#08B1C7] bg-white': isCurrent,
                       'border-gray-300':
                         !isCurrent && step.status !== 'completed' && step.status !== 'skipped',
                     },
@@ -56,8 +56,8 @@ export default function OnboardingTimeline({ steps, progress }: Props) {
               <div
                 className={clsx('flex justify-between text-base', {
                   'text-black': isCurrent || (step.required && step.status !== 'completed'),
-                  'text-blue-600': step.status === 'completed',
-                  'text-red-600': step.status === 'skipped',
+                  'text-[#08B1C7]': step.status === 'completed',
+                  'text-[#EE7777]': step.status === 'skipped',
                   'text-gray-400':
                     !isCurrent &&
                     !step.required &&
@@ -84,7 +84,7 @@ export default function OnboardingTimeline({ steps, progress }: Props) {
                 <div
                   className={clsx(
                     'absolute left-0 top-4 h-full border-l border-dashed ',
-                    step.status == 'completed' ? 'border-blue-600' : 'border-gray-300',
+                    step.status == 'completed' ? 'border-[#08B1C7]' : 'border-gray-300',
                   )}
                 />
               )}
@@ -99,7 +99,7 @@ export default function OnboardingTimeline({ steps, progress }: Props) {
           <Link
             href={`/assessments/${next.slug}/start`}
             variant="primary"
-            className="w-full text-center"
+            className="w-full text-center p-3"
           >
             Take the {next.name}
           </Link>

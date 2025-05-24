@@ -13,7 +13,7 @@ export function AssessmentIntro({
   isFirst: boolean;
 }) {
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6">
       <div className="flex items-center text-sm text-gray-500">
         {
           //<Clock className="w-4 h-4 mr-1" />
@@ -22,7 +22,7 @@ export function AssessmentIntro({
       </div>
 
       <h1 className="text-2xl font-bold">{assessment.name}</h1>
-      <p className="text-gray-600">{assessment.description}</p>
+      <p>{assessment.description}</p>
 
       <div className="flex gap-4 pt-4">
         {isFirst ? (

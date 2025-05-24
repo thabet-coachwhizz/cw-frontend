@@ -1,16 +1,19 @@
 // src/components/layout/AppLayout.tsx
 'use client';
 
-import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Loader from '@/components/ui/Loader';
 import Button from '@/components/ui/Button';
+import Link from '@/components/ui/Link';
+import { usePathname } from 'next/navigation';
+import clsx from 'clsx';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!loading && !user) {
@@ -31,17 +34,24 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       {user?.onboarding_status === 'completed' && (
-        <header className="p-4 flex justify-between items-center border-b">
-          <span className="font-medium">👤 {user.email}</span>
-          <div>
-            <Link href="/">Home</Link>
-            <Link href="/#test?d=2">Test 1</Link>
-            <Link href="/#test?d=3">Test 2</Link>
+        <header className="py-8 px-14 flex  items-center  bg-[#2A2D37] border-[#22252F] border-b">
+          <span className=" text-3xl">
+            <span className="font-bold">Coach</span>
+            <span className="font-thin">Whizz</span>
+          </span>
+          <div className="px-12">
+            <Link href="/" className={clsx('px-4', pathname === '/' && 'font-bold text-primary')}>
+              Home
+            </Link>
           </div>
-          <Button onClick={logout}>Logout</Button>
+          <div className="ml-auto">
+            <span className="hover:cursor-pointer" onClick={logout}>
+              Logout
+            </span>
+          </div>
         </header>
       )}
-      <main>{children}</main>
+      <main className="flex flex-col flex-1">{children}</main>
     </>
   );
 }

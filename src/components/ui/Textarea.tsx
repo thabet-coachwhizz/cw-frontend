@@ -24,15 +24,15 @@ export default function Textarea({
 }) {
   return (
     <div className="space-y-1">
-      <label className="block text-sm font-medium">{label}</label>
+      <label className="block text-base font-semibold leading-6 text-[#BBBBC0]">{label}</label>
       <textarea
         {...props}
         className={clsx(
-          'w-full rounded border p-2 text-black dark:text-white dark:bg-zinc-900 border-gray-300',
+          'w-full rounded-xl bg-white/5 px-4 py-3 text-base leading-5 font-normal placeholder-opacity-40 text-white focus:outline-none',
           className,
         )}
       />
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm text-[#EE7777]">{error}</p>}
     </div>
   );
 }

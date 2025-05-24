@@ -15,8 +15,8 @@ export default function Loader({ message, className }: { message?: string; class
     <div
       className={`flex flex-col items-center justify-center py-10 text-center space-y-2 ${className || ''}`}
     >
-      <div className="w-6 h-6 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
-      {message && <p className="text-sm text-gray-700">{message}</p>}
+      <div className="w-6 h-6 border-4 border-[#08B1C7] border-t-transparent rounded-full animate-spin" />
+      {message && <p className="text-sm text-white">{message}</p>}
     </div>
   );
 }

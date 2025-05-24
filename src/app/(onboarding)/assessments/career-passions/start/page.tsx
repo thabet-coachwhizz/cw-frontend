@@ -44,70 +44,75 @@ export default function CareerPassionsStartPage() {
   if (loading || !assessment) return <Loader />;
 
   return (
-    <div className="p-6 space-y-6">
-      <AssessmentStepper
-        assessments={flow.steps.map((s, i) => ({
-          slug: s.slug,
-          label: s.name,
-          status: s.status,
-          stepNumber: i + 1,
-        }))}
-        currentSlug={slug}
-      />
-
-      {step === 'intro' ? (
-        <AssessmentIntro
-          assessment={assessment}
-          isFirst={false}
-          onStart={() => setStep('select')}
-          onSkip={skipCurrent}
-        />
-      ) : step === 'select' ? (
-        <TopSelectionList
-          items={items.map((i) => ({
-            id: i.id,
-            title: i.content,
-            description: i.facet,
+    <div className="flex items-center justify-center p-8">
+      <div className="p-8 space-y-6 w-full max-w-5xl rounded-xl shadow bg-[#333546]">
+        <AssessmentStepper
+          assessments={flow.steps.map((s, i) => ({
+            slug: s.slug,
+            label: s.name,
+            status: s.status,
+            stepNumber: i + 1,
           }))}
-          onFinishSelection={(ids) => {
-            setSelectedItems(ids);
-            setStep('sort');
-          }}
-          maxItems={10}
+          currentSlug={slug}
         />
-      ) : step === 'summary' ? (
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold">Your Top 3 Career Passions</h2>
-          <ul className="list-disc list-inside text-gray-700 space-y-1">
-            {finalSorted.slice(0, 3).map((item, i) => (
-              <li key={item.id}>
-                <strong>{i + 1}.</strong> {item.title} –{' '}
-                <span className="text-sm text-gray-500">{item.description}</span>
-              </li>
-            ))}
-          </ul>
 
-          <Button onClick={handleSubmitSortedValues} loading={isSubmitting} disabled={isSubmitting}>
-            Continue
-          </Button>
-        </div>
-      ) : (
-        <PairwiseSorter
-          title="Let's prioritize your selected career passions"
-          items={selectedItems.map((id) => {
-            const item = items.find((v) => v.id === id)!;
-            return {
-              id: item.id,
-              title: item.content,
-              description: item.facet,
-            };
-          })}
-          onSorted={(sorted) => {
-            setFinalSorted(sorted);
-            setStep('summary');
-          }}
-        />
-      )}
+        {step === 'intro' ? (
+          <AssessmentIntro
+            assessment={assessment}
+            isFirst={false}
+            onStart={() => setStep('select')}
+            onSkip={skipCurrent}
+          />
+        ) : step === 'select' ? (
+          <TopSelectionList
+            items={items.map((i) => ({
+              id: i.id,
+              title: i.content,
+              description: i.facet,
+            }))}
+            onFinishSelection={(ids) => {
+              setSelectedItems(ids);
+              setStep('sort');
+            }}
+            maxItems={10}
+          />
+        ) : step === 'summary' ? (
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold">Your Top 3 Career Passions</h2>
+            <ul className="list-disc list-insidespace-y-1">
+              {finalSorted.slice(0, 3).map((item, i) => (
+                <li key={item.id}>
+                  <strong>{i + 1}.</strong> {item.title}
+                </li>
+              ))}
+            </ul>
+
+            <Button
+              onClick={handleSubmitSortedValues}
+              loading={isSubmitting}
+              disabled={isSubmitting}
+            >
+              Continue
+            </Button>
+          </div>
+        ) : (
+          <PairwiseSorter
+            title="Let's prioritize your selected career passions"
+            items={selectedItems.map((id) => {
+              const item = items.find((v) => v.id === id)!;
+              return {
+                id: item.id,
+                title: item.content,
+                description: item.facet,
+              };
+            })}
+            onSorted={(sorted) => {
+              setFinalSorted(sorted);
+              setStep('summary');
+            }}
+          />
+        )}
+      </div>
     </div>
   );
 }

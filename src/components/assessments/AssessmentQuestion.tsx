@@ -1,3 +1,5 @@
+import RadioGroup from '@/components/ui/RadioGroup';
+
 type AssessmentOption = {
   label: string;
   text: string;
@@ -18,29 +20,27 @@ export function AssessmentQuestion({
   index: number;
   total: number;
   question: AssessmentQuestion;
-  selected: string | null;
+  selected: string | undefined;
   onChange: (option: string) => void;
 }) {
   return (
     <div className="space-y-6">
-      <div className="text-sm text-gray-500 font-medium">
+      <div className="text-sm font-medium">
         Question {index + 1} of {total}
       </div>
-      <div className="text-lg font-semibold">{question.content}</div>
+
       <div className="space-y-2">
-        {question.options.map((opt) => (
-          <label key={opt.label} className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="radio"
-              name={`question-${question.id}`}
-              value={opt.label}
-              checked={selected === opt.label}
-              onChange={() => onChange(opt.label)}
-              className="accent-blue-500"
-            />
-            <span>{opt.text}</span>
-          </label>
-        ))}
+        <RadioGroup
+          label={question.content}
+          name={`question-${question.id}`}
+          options={question.options.map((opt) => ({
+            value: opt.label,
+            label: opt.text,
+          }))}
+          value={selected}
+          onChange={(e) => onChange(e.target.value)}
+          direction="column"
+        />
       </div>
     </div>
   );

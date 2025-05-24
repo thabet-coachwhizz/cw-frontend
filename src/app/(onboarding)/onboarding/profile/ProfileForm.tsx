@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Form from '@/components/ui/Form';
 import Input from '@/components/ui/Input';
-import Select from '@/components/ui/Select';
 import RadioGroup from '@/components/ui/RadioGroup';
 import Button from '@/components/ui/Button';
 
@@ -77,7 +76,7 @@ export default function ProfileForm({ onSubmit, loading }: ProfileFormProps) {
         value={form.gender}
         onChange={handleChange}
         error={errors?.gender}
-        direction="column" // can also be 'row'
+        direction="row" // can also be 'column'
       />
       <Input
         type="date"
@@ -100,18 +99,19 @@ export default function ProfileForm({ onSubmit, loading }: ProfileFormProps) {
         error={errors?.title}
       />
 
-      <Select
+      <RadioGroup
         label="Work environment"
         name="work_environment"
-        onChange={handleChange}
+        options={[
+          { value: 'remote', label: 'Remote' },
+          { value: 'hybrid', label: 'Hybrid' },
+          { value: 'on-premises', label: 'On Site' },
+        ]}
         value={form.work_environment}
+        onChange={handleChange}
         error={errors?.work_environment}
-      >
-        <option value="">Select Environment</option>
-        <option value="hybrid">Hybrid</option>
-        <option value="remote">Remote</option>
-        <option value="on-premises">On-Premises</option>
-      </Select>
+        direction="column" // can also be 'row'
+      />
 
       <Button type="submit" loading={loading} className="w-full mt-4">
         Continue

@@ -111,6 +111,7 @@ export default function LoginForm() {
               label="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter Email"
               required
             />
             <Input
@@ -118,6 +119,7 @@ export default function LoginForm() {
               label="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter Password"
               required
             />
             <Button type="submit" loading={submitting} className="w-full mt-4">

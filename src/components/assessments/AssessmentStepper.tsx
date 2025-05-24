@@ -18,9 +18,9 @@ export function AssessmentStepper({
         {assessments.map((a) => {
           const isCurrent = a.slug === currentSlug;
           const colorClass = isCurrent
-            ? 'bg-blue-500'
+            ? 'bg-[#08B1C7]'
             : a.status === 'completed'
-              ? 'bg-blue-500'
+              ? 'bg-[#08B1C7]'
               : a.status === 'skipped'
                 ? 'bg-red-500'
                 : 'bg-gray-300';
@@ -28,7 +28,7 @@ export function AssessmentStepper({
           return <div key={a.slug} className={`h-2 w-20 rounded ${colorClass}`} />;
         })}
       </div>
-      <div className="flex justify-between w-full text-sm font-medium text-gray-600">
+      <div className="flex justify-between w-full text-sm font-medium">
         <span>{assessments.find((a) => a.slug === currentSlug)?.label}</span>
         <span>{assessments.find((a) => a.slug === currentSlug)?.stepNumber}/3</span>
       </div>

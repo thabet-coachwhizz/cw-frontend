@@ -25,7 +25,7 @@ export default function Select({
   children: React.ReactNode;
 }) {
   return (
-    <div className="space-y-1">
+    <div className="space-y-1 w-full">
       <label className="block text-sm font-medium">{label}</label>
       <select
         {...props}
@@ -36,7 +36,7 @@ export default function Select({
       >
         {children}
       </select>
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm text-[#EE7777]">{error}</p>}
     </div>
   );
 }

@@ -3,12 +3,10 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <main className="p-8">
-      <h1 className="text-xl font-bold">HOME</h1>
-      <Link href="/">Home</Link>
-      <Link href="/#dashboard?d=1">Dashboard</Link>
-      <Link href="/#dashboard?d=2">About</Link>
-      <Link href="/#dashboard?d=3">Link</Link>
+    <main className="py-8 px-14 flex-grow flex items-center justify-center">
+      <div className="">
+        <h1 className="text-xl font-bold">No Challenge Initiated</h1>
+      </div>
     </main>
   );
 }

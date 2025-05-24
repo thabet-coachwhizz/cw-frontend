@@ -22,8 +22,8 @@ export default function GetStartedPage() {
 
   return (
     <div>
-      <main className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
-        <div className="w-full max-w-3xl bg-white p-8 rounded shadow">
+      <main className="min-h-screen flex items-center justify-center p-4">
+        <div className="w-full max-w-3xl p-8 rounded-xl shadow bg-[#333546]">
           <h1>{`Let's get to know you better`}</h1>
           <p>
             Help us tailor your growith journey by answering a few quick assessments.

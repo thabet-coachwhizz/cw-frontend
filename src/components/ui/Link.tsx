@@ -27,10 +27,10 @@ export default function AppLink({
   variant?: 'link' | 'primary' | 'secondary' | 'outline';
 } & React.AnchorHTMLAttributes<HTMLAnchorElement>) {
   const styles = {
-    link: 'text-blue-600 underline',
-    primary: 'bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded',
-    secondary: 'bg-gray-200 text-black hover:bg-gray-300 px-4 py-2 rounded',
-    outline: 'border border-gray-500 text-black px-4 py-2 rounded',
+    link: 'text[#08B1C7]',
+    primary: 'bg-[#08B1C7] text-white shadow-lg shadow-[#08B1C724] hover:bg-[#089EB3] rounded-xl',
+    secondary: 'bg-[#CBCED9] text-[#333546] rounded-xl',
+    outline: 'bg-none text-[#73798F] border-[#F5F5F5] border-1 rounded-xl',
   };
 
   return (

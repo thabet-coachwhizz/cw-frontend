@@ -4,8 +4,8 @@ import GuardedPage from '@/components/auth/GuardedPage';
 export default function ResetPasswordRequestPage() {
   return (
     <GuardedPage>
-      <main className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
-        <div className="w-full max-w-lg bg-white p-8 rounded shadow">
+      <main className="min-h-screen flex items-center justify-center p-4 ">
+        <div className="w-full max-w-lg bg-[#333546] p-8 rounded shadow">
           <ResetPasswordFlow />
         </div>
       </main>
