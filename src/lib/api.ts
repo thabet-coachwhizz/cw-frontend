@@ -20,4 +20,7 @@ export const API = {
   ASSESSMENT_SUBMIT: (slug: string) => `${API.BASE}/api/v1/assessments/${slug}/submit/`,
   ASSESSMENT_RESULT: (slug: string) => `${API.BASE}/api/v1/assessments/${slug}/latest/`,
   ASSESSMENT_SKIP: (slug: string) => `${API.BASE}/api/v1/assessments/${slug}/skip/`,
+
+  // Challenges
+  CHALLENGE: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/challenges/`,
 };

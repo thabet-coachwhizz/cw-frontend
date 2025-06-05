@@ -5,7 +5,6 @@ import { useAuth } from '@/context/AuthContext';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Loader from '@/components/ui/Loader';
-import Button from '@/components/ui/Button';
 import Link from '@/components/ui/Link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';

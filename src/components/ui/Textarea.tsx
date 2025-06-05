@@ -18,13 +18,15 @@ export default function Textarea({
   className,
   ...props
 }: React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
-  label: string;
+  label?: string;
   error?: string;
   className?: string;
 }) {
   return (
     <div className="space-y-1">
-      <label className="block text-base font-semibold leading-6 text-[#BBBBC0]">{label}</label>
+      {label && (
+        <label className="block text-base font-semibold leading-6 text-[#BBBBC0]">{label}</label>
+      )}
       <textarea
         {...props}
         className={clsx(
