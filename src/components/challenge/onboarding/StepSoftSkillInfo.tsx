@@ -33,7 +33,7 @@ export default function StepSoftSkillInfo({ skill, onNext }: StepSoftSkillInfoPr
       </div>
 
       {skill.main_task_name && (
-        <div className="p-4 rounded-xl bg-[#22252f] mb-2 w-full">
+        <div className="p-4 rounded-xl bg-[#333546] mb-2 w-full">
           <div className="flex justify-between  text-sm mb-2">
             <span className=" text-[#BBBBC0]">Main Challenge</span>
             <span className="text-[#08B1C7] flex items-center gap-1">
@@ -48,31 +48,17 @@ export default function StepSoftSkillInfo({ skill, onNext }: StepSoftSkillInfoPr
         </div>
       )}
       <Accordion type="multiple">
-        <AccordionItem value="why" className="p-4 rounded-xl bg-[#22252f] mb-2">
-          <AccordionTrigger>Why it’s needed</AccordionTrigger>
-          <AccordionContent>
-            <p className="text-sm text-[#BBBBC0]">{skill.why_its_needed}</p>
-          </AccordionContent>
-        </AccordionItem>
-
-        <AccordionItem value="mindset" className="p-4 rounded-xl bg-[#22252f] mb-2">
+        <AccordionItem value="mindset" className="p-4 rounded-xl bg-[#333546] mb-2">
           <AccordionTrigger>Reframe the Mindset</AccordionTrigger>
           <AccordionContent>
             <p className="text-sm text-[#BBBBC0]">{skill.reframe_mindset}</p>
           </AccordionContent>
         </AccordionItem>
 
-        <AccordionItem value="awareness" className="p-4 rounded-xl bg-[#22252f] mb-2">
-          <AccordionTrigger>Awareness</AccordionTrigger>
+        <AccordionItem value="awareness" className="p-4 rounded-xl bg-[#333546] mb-2">
+          <AccordionTrigger>Observe & Identify</AccordionTrigger>
           <AccordionContent>
             <p className="text-sm text-[#BBBBC0]">{skill.awareness}</p>
-          </AccordionContent>
-        </AccordionItem>
-
-        <AccordionItem value="tip" className="p-4 rounded-xl bg-[#22252f] mb-2">
-          <AccordionTrigger>Pro Tip</AccordionTrigger>
-          <AccordionContent>
-            <p className="text-sm text-[#BBBBC0]">{skill.pro_tip}</p>
           </AccordionContent>
         </AccordionItem>
       </Accordion>

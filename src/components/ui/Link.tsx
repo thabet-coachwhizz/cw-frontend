@@ -34,11 +34,7 @@ export default function AppLink({
   };
 
   return (
-    <Link
-      href={href}
-      className={clsx('inline-block font-medium', styles[variant], className)}
-      {...props}
-    >
+    <Link href={href} className={clsx('inline-block ', styles[variant], className)} {...props}>
       {children}
     </Link>
   );

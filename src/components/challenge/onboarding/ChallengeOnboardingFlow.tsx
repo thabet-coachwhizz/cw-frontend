@@ -13,6 +13,7 @@ import StepConfirmStart from './StepConfirmStart';
 import { createChallenge } from '@/lib/api/challenges';
 import { ChallengeCreatePayload, Challenge } from '@/types/challenge';
 import toast from 'react-hot-toast';
+import clsx from 'clsx';
 
 export default function ChallengeOnboardingFlow({ onFinish }: { onFinish: () => void }) {
   const [step, setStep] = useState(1);
@@ -46,70 +47,94 @@ export default function ChallengeOnboardingFlow({ onFinish }: { onFinish: () => 
   return (
     <>
       {step === 1 && (
-        <StepIntro
-          value={form.title}
-          onChange={(v) => setField('title', v)}
-          onNext={() => setStep(2)}
-        />
+        <CustomBox className="max-w-[690px]">
+          <StepIntro
+            value={form.title}
+            onChange={(v) => setField('title', v)}
+            onNext={() => setStep(2)}
+          />
+        </CustomBox>
       )}
       {step === 2 && (
-        <StepDescription
-          value={form.description}
-          onChange={(v) => setField('description', v)}
-          onNext={() => setStep(3)}
-          onBack={() => setStep(1)}
-        />
+        <CustomBox className="max-w-[690px]">
+          <StepDescription
+            value={form.description}
+            onChange={(v) => setField('description', v)}
+            onNext={() => setStep(3)}
+            onBack={() => setStep(1)}
+          />
+        </CustomBox>
       )}
       {step === 3 && (
-        <StepImpact
-          value={form.impact}
-          onChange={(v) => setField('impact', v)}
-          onNext={() => setStep(4)}
-          onBack={() => setStep(2)}
-        />
+        <CustomBox className="max-w-[690px]">
+          <StepImpact
+            value={form.impact}
+            onChange={(v) => setField('impact', v)}
+            onNext={() => setStep(4)}
+            onBack={() => setStep(2)}
+          />
+        </CustomBox>
       )}
       {step === 4 && (
-        <StepAttempts
-          value={form.attempts}
-          onChange={(v) => setField('attempts', v)}
-          onNext={() => setStep(5)}
-          onBack={() => setStep(3)}
-        />
+        <CustomBox className="max-w-[690px]">
+          <StepAttempts
+            value={form.attempts}
+            onChange={(v) => setField('attempts', v)}
+            onNext={() => setStep(5)}
+            onBack={() => setStep(3)}
+          />
+        </CustomBox>
       )}
       {step === 5 && (
-        <StepOutcome
-          value={form.desired_outcome}
-          onChange={(v) => setField('desired_outcome', v)}
-          onSubmit={submitChallenge}
-          onBack={() => setStep(4)}
-        />
+        <CustomBox className="max-w-[690px]">
+          <StepOutcome
+            value={form.desired_outcome}
+            onChange={(v) => setField('desired_outcome', v)}
+            onSubmit={submitChallenge}
+            onBack={() => setStep(4)}
+          />
+        </CustomBox>
       )}
-      {step === 6 && <StepProcessing />}
+      {step === 6 && (
+        <CustomBox className="max-w-[453px]">
+          <StepProcessing />
+        </CustomBox>
+      )}
       {step === 7 && challengeResponse && (
-        <StepReveal softSkill={challengeResponse?.soft_skill_name} onNext={() => setStep(8)} />
+        <CustomBox className="max-w-[453px]">
+          <StepReveal softSkill={challengeResponse?.soft_skill_name} onNext={() => setStep(8)} />
+        </CustomBox>
       )}
       {step === 8 && challengeResponse && (
-        <StepSoftSkillInfo
-          skill={{
-            name: challengeResponse.soft_skill_name,
-            main_task_name: challengeResponse.main_task_name,
-            what_it_is: challengeResponse.soft_skill_description,
-            why_its_needed: challengeResponse.soft_skill_reason,
-            reframe_mindset: challengeResponse.soft_skill_mindset,
-            awareness: challengeResponse.soft_skill_awareness,
-            pro_tip: challengeResponse.pro_tip,
-          }}
-          onNext={() => setStep(9)}
-        />
+        <div className="max-w-[453px]">
+          <StepSoftSkillInfo
+            skill={{
+              name: challengeResponse.soft_skill_name,
+              main_task_name: challengeResponse.main_task_name,
+              what_it_is: challengeResponse.soft_skill_description,
+              why_its_needed: challengeResponse.soft_skill_reason,
+              reframe_mindset: challengeResponse.soft_skill_mindset,
+              awareness: challengeResponse.soft_skill_awareness,
+              pro_tip: challengeResponse.pro_tip,
+            }}
+            onNext={() => setStep(9)}
+          />
+        </div>
       )}
       {step === 9 && challengeResponse && (
-        <StepConfirmStart
-          softSkill={challengeResponse.soft_skill_name}
-          mainTask={challengeResponse.main_task_name}
-          mainTaskDescription={challengeResponse.soft_skill_description}
-          onConfirm={onFinish}
-        />
+        <CustomBox className="max-w-[453px]">
+          <StepConfirmStart
+            softSkill={challengeResponse.soft_skill_name}
+            mainTask={challengeResponse.main_task_name}
+            mainTaskDescription={challengeResponse.soft_skill_description}
+            onConfirm={onFinish}
+          />
+        </CustomBox>
       )}
     </>
   );
+}
+
+function CustomBox({ children, className }: { children: React.ReactNode; className?: string }) {
+  return <div className={clsx('rounded-xl p-6 bg-[#333546]  w-full', className)}>{children}</div>;
 }

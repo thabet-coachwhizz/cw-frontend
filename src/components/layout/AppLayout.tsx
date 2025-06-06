@@ -42,6 +42,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <Link href="/" className={clsx('px-4', pathname === '/' && 'font-bold text-primary')}>
               Home
             </Link>
+            |
+            <Link
+              href="/challenges"
+              className={clsx('px-4', pathname === '/challenges' && 'font-bold text-primary')}
+            >
+              Challenges
+            </Link>
           </div>
           <div className="ml-auto">
             <span className="hover:cursor-pointer" onClick={logout}>
