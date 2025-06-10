@@ -8,7 +8,7 @@ interface Props {
 }
 
 export default function ChallengeListItem({ challenge, onClick }: Props) {
-  const currentStep = challenge.tasks?.find((t) => t.status === 'active');
+  const currentStep = challenge.active_task;
 
   return (
     <div

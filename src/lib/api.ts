@@ -23,4 +23,6 @@ export const API = {
 
   // Challenges
   CHALLENGE: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/challenges/`,
+  CHALLENGE_COMPLETE_TASK: (challengeId: number, taskId: number) =>
+    `${API.CHALLENGE}${challengeId}/tasks/${taskId}/complete/`,
 };

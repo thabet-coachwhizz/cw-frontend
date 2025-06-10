@@ -17,6 +17,12 @@ export interface Challenge {
   created_at: Date;
   user: string;
   tasks: ChallengeTask[];
+  active_task?: {
+    id: number;
+    step_order: number;
+    title: string;
+    status: 'locked' | 'active' | 'completed';
+  };
 }
 
 export interface ChallengeCreatePayload {
@@ -25,6 +31,12 @@ export interface ChallengeCreatePayload {
   impact: string;
   attempts: string;
   desired_outcome: string;
+}
+
+export interface TaskCompletionPayload {
+  confidence_rating: number;
+  feedback_response: string;
+  other_text?: string;
 }
 
 export interface ChallengeTask {
