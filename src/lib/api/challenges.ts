@@ -40,3 +40,10 @@ export async function submitTaskCompletion(
     true,
   );
 }
+
+export async function deleteChallenge(challengeId: number, reason: string, otherText?: string) {
+  return apiClient.post(API.CHALLENGE_DELETE(challengeId), {
+    reason,
+    other_text: otherText,
+  });
+}

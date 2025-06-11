@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { getChallengeById } from '@/lib/api/challenges';
 import { Challenge } from '@/types/challenge';
@@ -9,30 +9,30 @@ import Loader from '@/components/ui/Loader';
 
 export default function ChallengeDetailPage() {
   const { id } = useParams();
-
   const router = useRouter();
 
   const [challenge, setChallenge] = useState<Challenge | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const loadChallenge = useCallback(async () => {
     const numericId = Number(id);
     if (!numericId) return;
 
-    const loadChallenge = async () => {
-      try {
-        const res = await getChallengeById(numericId);
-        setChallenge(res);
-      } catch (err) {
-        console.error('Failed to load challenge', err);
-        router.push('/challenges'); // fallback if not found or unauthorized
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadChallenge();
+    setLoading(true);
+    try {
+      const res = await getChallengeById(numericId);
+      setChallenge(res);
+    } catch (err) {
+      console.error('Failed to load challenge', err);
+      router.push('/challenges'); // fallback if not found or unauthorized
+    } finally {
+      setLoading(false);
+    }
   }, [id, router]);
+
+  useEffect(() => {
+    loadChallenge();
+  }, [loadChallenge]);
 
   if (loading) return <Loader message="Loading challenge..." />;
 
@@ -41,7 +41,7 @@ export default function ChallengeDetailPage() {
   return (
     <div className="px-6 py-8 flex justify-center">
       <div className="w-full max-w-[990px] rounded-3xl bg-[#1C1F27] mt-12 p-8">
-        <ChallengeDetail challenge={challenge} />
+        <ChallengeDetail challenge={challenge} onRefresh={loadChallenge} />
       </div>
     </div>
   );

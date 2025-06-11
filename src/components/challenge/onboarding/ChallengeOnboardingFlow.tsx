@@ -15,7 +15,11 @@ import { ChallengeCreatePayload, Challenge } from '@/types/challenge';
 import toast from 'react-hot-toast';
 import clsx from 'clsx';
 
-export default function ChallengeOnboardingFlow({ onFinish }: { onFinish: () => void }) {
+export default function ChallengeOnboardingFlow({
+  onFinish,
+}: {
+  onFinish: (newChallengeId?: number) => void;
+}) {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState<ChallengeCreatePayload>({
     title: '',
@@ -127,7 +131,7 @@ export default function ChallengeOnboardingFlow({ onFinish }: { onFinish: () => 
             softSkill={challengeResponse.soft_skill_name}
             mainTask={challengeResponse.main_task_name}
             mainTaskDescription={challengeResponse.soft_skill_description}
-            onConfirm={onFinish}
+            onConfirm={() => onFinish(challengeResponse.id)}
           />
         </CustomBox>
       )}

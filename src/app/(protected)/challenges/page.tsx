@@ -29,9 +29,12 @@ export default function ChallengesPage() {
     loadChallenges();
   }, []);
 
-  const handleFinish = () => {
+  const handleFinish = (newChallengeId?: number) => {
     setShowForm(false);
     loadChallenges();
+    if (newChallengeId) {
+      router.push(`/challenges/${newChallengeId}`);
+    }
   };
 
   if (loading) return <Loader message="Loading challenges..." />;

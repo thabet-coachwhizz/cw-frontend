@@ -10,12 +10,14 @@ import ChallengeAccordion from './ChallengeAccordion';
 import ChallengeProgressBar from './ChallengeProgressBar';
 import Button from '@/components/ui/Button';
 import ChallengeFeedbackFlow from '@/components/challenge/complete/ChallengeFeedbackFlow';
+import DeleteChallengeDialog from './DeleteChallengeDialog';
 
 interface Props {
   challenge: Challenge;
+  onRefresh?: () => void;
 }
 
-export default function ChallengeDetail({ challenge }: Props) {
+export default function ChallengeDetail({ challenge, onRefresh }: Props) {
   const router = useRouter();
   const activeStep = challenge.tasks.find((t) => t.status === 'active');
   const [currentStep, setCurrentStep] = useState(activeStep?.step_order || 1);
@@ -23,6 +25,7 @@ export default function ChallengeDetail({ challenge }: Props) {
   const step = challenge.tasks.find((t) => t.step_order === currentStep) as ChallengeTask;
 
   const [showFeedback, setShowFeedback] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   return (
     <>
@@ -63,7 +66,7 @@ export default function ChallengeDetail({ challenge }: Props) {
             task={step}
             onComplete={() => {
               setShowFeedback(false);
-              //refreshChallenge(); // TODO:: refresh challeges after the submittions
+              if (onRefresh) onRefresh(); // Refresh challenge after completion
             }}
           />
         </>
@@ -121,7 +124,7 @@ export default function ChallengeDetail({ challenge }: Props) {
                       <div className="flex justify-between mt-6">
                         <Button
                           variant="outline"
-                          className="text-white border-2 !border-[#08B1c7] bg-[#292A3B]"
+                          className="text-white border-2 !border-[#08B1c7] bg-[#292A3B] d-none"
                         >
                           Are you stuck?
                         </Button>
@@ -230,10 +233,15 @@ export default function ChallengeDetail({ challenge }: Props) {
               <div className="font-semibold mt-2">Pro tip</div>
               <p className="text-[#FFFFFF80]">{challenge.pro_tip}</p>
               <div className="mt-8">
-                <DeleteChallengeButton />
+                <DeleteChallengeButton onClick={() => setShowDeleteDialog(true)} />
               </div>
             </div>
           </section>
+          <DeleteChallengeDialog
+            open={showDeleteDialog}
+            challengeId={challenge.id}
+            onClose={() => setShowDeleteDialog(false)}
+          />
         </>
       )}
     </>
