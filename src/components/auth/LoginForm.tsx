@@ -104,7 +104,7 @@ export default function LoginForm() {
     <div className="space-y-6 max-w-md mx-auto">
       {!challengeRequired ? (
         <>
-          <h1 className="text-xl font-bold mb-4">Login to CoachWhizz</h1>
+          <h1 className="text-3xl font-semibold mb-10">Welcome Back</h1>
           <Form onSubmit={handleLogin} error={error} disabled={submitting}>
             <Input
               type="email"
