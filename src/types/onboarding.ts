@@ -2,6 +2,7 @@ export type AssessmentStatus = 'not_started' | 'completed' | 'skipped';
 
 export interface OnboardingProgress {
   profile_completed: boolean;
+  terms_accepted: boolean;
   personality_done: boolean;
   values_done: boolean;
   passions_done: boolean;

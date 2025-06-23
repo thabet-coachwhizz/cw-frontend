@@ -8,3 +8,7 @@ export async function getOnboardingProgress() {
 export async function updateGoal(goal_text: string) {
   return apiClient.post(API.ONBOARDING_GOAL, { goal_text }, true);
 }
+
+export async function acceptTerms() {
+  return apiClient.post(API.ONBOARDING_TERMS, { terms_accepted: true }, true);
+}

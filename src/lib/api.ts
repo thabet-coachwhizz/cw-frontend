@@ -14,6 +14,7 @@ export const API = {
   // Onboarding
   ONBOARDING_PROGRESS: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/onboarding/progress/`,
   ONBOARDING_GOAL: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/onboarding/goal/`,
+  ONBOARDING_TERMS: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/onboarding/terms/`,
 
   // Assessments
   ASSESSMENT_DETAIL: (slug: string) => `${API.BASE}/api/v1/assessments/${slug}/`,

@@ -16,12 +16,12 @@ export default function Checkbox({
   className,
   ...props
 }: React.InputHTMLAttributes<HTMLInputElement> & {
-  label: string;
+  label: React.ReactNode;
   className?: string;
 }) {
   return (
     <label className={clsx('flex items-center space-x-2 text-sm', className)}>
-      <input type="checkbox" className="h-4 w-4" {...props} />
+      <input type="checkbox" className="h-4 w-4 accent-[#08B1C7]" {...props} />
       <span>{label}</span>
     </label>
   );

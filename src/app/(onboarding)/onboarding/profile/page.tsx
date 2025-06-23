@@ -189,7 +189,7 @@ export default function ProfileStep() {
             <h2 className="text-2xl font-semibold text-white mb-8">First step completed!</h2>
             <p>Thank you for completing the first step of your learning journey with CoachWhizz.</p>
             <p>{`Now let's explore the platform, shall we?`}</p>
-            <Button className="w-full mt-8" onClick={() => router.push('/onboarding/get-started')}>
+            <Button className="w-full mt-8" onClick={() => router.push('/onboarding/terms')}>
               {`LET'S START`}
             </Button>
           </div>
