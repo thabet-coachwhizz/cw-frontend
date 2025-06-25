@@ -2,90 +2,127 @@
 
 import clsx from 'clsx';
 import Link from '@/components/ui/Link';
-import { AssessmentStepState, OnboardingProgress } from '@/types/onboarding';
+import { AssessmentStepState } from '@/types/onboarding';
+import { skipAssessment } from '@/lib/api/assessments';
 
 interface Props {
   steps: AssessmentStepState[];
-  progress: OnboardingProgress;
+  reloadProgress: () => void;
 }
 
-export default function OnboardingTimeline({ steps, progress }: Props) {
+export default function OnboardingTimeline({ steps, reloadProgress }: Props) {
   const next = steps.find((step) => step.status == 'not_started');
   const nextIndex = steps.findIndex((s) => s.status === 'not_started');
+  const total = steps.length;
+  const completedCount = steps.filter((step) => step.status === 'completed').length;
+  const customDash = {
+    borderWidth: '2px',
+    borderStyle: 'solid',
+    borderImage: 'repeating-linear-gradient(to right, #B5B9BE 0 5px, transparent 5px 10px) 1',
+  };
+  const customSolid = {
+    borderWidth: '2px',
+    borderStyle: 'solid',
+    borderColor: '#08B1C7',
+  };
+
+  const onSkip = async () => {
+    if (next && next.required === false) {
+      try {
+        await skipAssessment(next.slug);
+
+        reloadProgress();
+      } catch (err) {
+        console.error('Failed to skip assessment:', err);
+      }
+    } else {
+      console.warn(`Skipping is not allowed for required assessment: ${next?.slug}`);
+    }
+  };
   return (
     <div className="space-y-8">
       {/* Progress header */}
       <div>
         <div className="flex justify-between items-center mb-2">
-          <span className="font-medium ">Progress</span>
-          <span className="text-sm ">{progress.percent_complete}% completed</span>
-        </div>
-        <div className="h-2 rounded bg-gray-200 overflow-hidden">
-          <div
-            className="h-full bg-[#08B1C7] transition-all duration-300"
-            style={{ width: `${progress.percent_complete}%` }}
-          />
+          <span className="font-medium ">Complete Assessments</span>
+          <span className="text-sm bg-[#ffffff0f] rounded-2xl py-0.5 px-2">
+            {completedCount}/{total}
+          </span>
         </div>
       </div>
 
-      {/* Timeline */}
-      <div className="relative border-dashed border-gray-300 pl-4">
+      {/* Horizontal Timeline */}
+      <div className=" flex ">
         {steps.map((step, i) => {
           const isCurrent = i === nextIndex;
 
           return (
-            <div key={step.step} className="relative pb-6 pt-1 pl-4">
+            <div key={step.step} className="relative flex flex-col flex-1">
               {/* Step circle */}
-              <div className="absolute -left-2 top-1.5 w-4 h-4 flex items-center justify-center">
-                <div
-                  className={clsx(
-                    'w-4 h-4 rounded-full border-2',
+              <div
+                className={clsx(
+                  'w-9 h-9 rounded-full border-2 flex items-center justify-center z-10',
 
-                    {
-                      'bg-[#08B1C7] border-[#08B1C7]': step.status === 'completed',
-                      'border-5  border-[#EE7777] bg-white': step.status === 'skipped',
-                      'border-5 border-[#08B1C7] bg-white': isCurrent,
-                      'border-gray-300':
-                        !isCurrent && step.status !== 'completed' && step.status !== 'skipped',
-                    },
-                  )}
-                ></div>
+                  {
+                    'bg-[#08B1C7] border-[#08B1C7]': step.status === 'completed',
+                    'border-2  border-[#EE7777] bg-[#292A38]': step.status === 'skipped',
+                    'border-2 border-[#08B1C7] bg-[#292A38]': isCurrent,
+                    'border-gray-300 bg-[#333546]':
+                      !isCurrent && step.status !== 'completed' && step.status !== 'skipped',
+                  },
+                )}
+              >
+                <span className="font-bold text-white">{step.step}</span>
               </div>
 
               {/* Step content */}
               <div
-                className={clsx('flex justify-between text-base', {
-                  'text-black': isCurrent || (step.required && step.status !== 'completed'),
-                  'text-[#08B1C7]': step.status === 'completed',
-                  'text-[#EE7777]': step.status === 'skipped',
-                  'text-gray-400':
-                    !isCurrent &&
-                    !step.required &&
-                    step.status !== 'completed' &&
-                    step.status !== 'skipped',
+                className={clsx('mt-4 space-y-2', {
+                  'opacity-60': !isCurrent && step.status === 'not_started',
                 })}
               >
-                <div>
-                  <h3 className={clsx('text-sm font-semibold')}>Step {step.step}</h3>
-                  <p>{step.name}</p>
-                  <p className={clsx('text-sm')}>{step.description}</p>
+                <div
+                  className={clsx({
+                    'text-white': step.status !== 'completed',
+                    'text-[#08B1C7]': step.status === 'completed',
+                  })}
+                >
+                  <h3 className="text-sm font-bold ">{step.name}</h3>
+                  <p className="text-xs">{step.description}</p>
                 </div>
-                <span className={clsx('text-xs mt-1 font-medium')}>
-                  {step.status == 'not_started'
-                    ? step.required
-                      ? 'Required'
-                      : 'Optional'
-                    : step.status}
-                </span>
+                {step.status !== 'completed' && step.status !== 'skipped' && (
+                  <p className="text-xs font-medium text-[#08B1C7]">
+                    {step.required ? '* Required' : 'Optional'}
+                  </p>
+                )}
+                {step.status === 'completed' && (
+                  <Link
+                    href={`/assessments/${step.slug}/start`}
+                    variant="outline"
+                    className=" text-sm text-white py-2 px-4 bg-[#292A38] !border-[#08B1c7]"
+                  >
+                    Edit Response
+                  </Link>
+                )}
+                {step.status === 'skipped' && (
+                  <Link
+                    href={`/assessments/${step.slug}/start`}
+                    variant="outline"
+                    className=" text-sm text-white py-2 px-4 bg-[#292A38] !border-[#08B1c7]"
+                  >
+                    Add Response
+                  </Link>
+                )}
               </div>
 
               {/* Connector */}
               {i < steps.length - 1 && (
                 <div
                   className={clsx(
-                    'absolute left-0 top-4 h-full border-l border-dashed ',
-                    step.status == 'completed' ? 'border-[#08B1C7]' : 'border-gray-300',
+                    'absolute top-4 w-full h-0.5 ',
+                    step.status === 'completed' ? 'border-[#08B1C7]' : 'border-gray-300',
                   )}
+                  style={step.status === 'completed' ? customSolid : customDash}
                 />
               )}
             </div>
@@ -95,13 +132,24 @@ export default function OnboardingTimeline({ steps, progress }: Props) {
 
       {/* CTA Button */}
       {next && (
-        <div className="pt-4">
+        <div className="pt-16 text-right">
+          {next.required === false && (
+            <Link
+              variant="outline"
+              href=""
+              onClick={onSkip}
+              className="border-[#08B1C7]! border-2 bg-[#292A38] text-white mr-3 py-3 px-5"
+            >
+              Skip
+            </Link>
+          )}
+
           <Link
             href={`/assessments/${next.slug}/start`}
             variant="primary"
-            className="w-full text-center p-3"
+            className=" text-center p-3 uppercase"
           >
-            Take the {next.name}
+            Start <span className="font-bold">{next.name}</span>
           </Link>
         </div>
       )}

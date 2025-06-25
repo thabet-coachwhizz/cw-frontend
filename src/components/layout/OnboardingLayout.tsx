@@ -33,7 +33,7 @@ export default function OnboardingLayout({ children }: { children: React.ReactNo
 
         <Button onClick={logout}>Logout</Button>
       </header>
-      <main>{children}</main>
+      <main className="flex flex-1 flex-col">{children}</main>
     </>
   );
 }

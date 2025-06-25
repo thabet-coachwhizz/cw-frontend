@@ -27,7 +27,7 @@ export default function AppLink({
   variant?: 'link' | 'primary' | 'secondary' | 'outline';
 } & React.AnchorHTMLAttributes<HTMLAnchorElement>) {
   const styles = {
-    link: 'text[#08B1C7]',
+    link: 'text-[#08B1C7]',
     primary: 'bg-[#08B1C7] text-white shadow-lg shadow-[#08B1C724] hover:bg-[#089EB3] rounded-xl',
     secondary: 'bg-[#CBCED9] text-[#333546] rounded-xl',
     outline: 'bg-none text-[#73798F] border-[#F5F5F5] border-1 rounded-xl',
