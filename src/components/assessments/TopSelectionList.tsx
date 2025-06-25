@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import Button from '@/components/ui/Button';
 import { RankedItem } from '@/types/assessments';
+import { Check, ArrowRight } from 'lucide-react';
+import clsx from 'clsx';
 
 interface TopSelectionListProps {
   items: RankedItem[];
@@ -23,7 +25,6 @@ export function TopSelectionList({
   onFinishSelection,
   maxItems = 10,
   title = 'Select your top items',
-  description = `Click to select. You must choose exactly ${maxItems}.`,
 }: TopSelectionListProps) {
   const [selected, setSelected] = useState<number[]>([]);
 
@@ -41,33 +42,55 @@ export function TopSelectionList({
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-semibold">{title}</h2>
-      <p className="text-sm text-gray-500">{description}</p>
+      <div className="flex justify-between text-xl">
+        <h2 className="font-semibold">{title}</h2>
+        <span className="text-[#72747A]"> {selected.length} Selected</span>
+      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1">
         {items.map((item) => (
           <div
             key={item.id}
             onClick={() => toggle(item.id)}
-            className={`cursor-pointer p-4 border rounded-xl transition ${
+            className={`cursor-pointer p-4 rounded-xl transition border-2 ${
               isSelected(item.id)
                 ? 'border-[#08B1C7] bg-[#292A38]'
-                : 'border-gray-300 hover:border-[#08B1C7]'
+                : 'border-[#333546] bg-[#333546] hover:border-[#08B1C7] hover:bg-[#292A38] opacity-60 hover:opacity-100'
             }`}
           >
-            <h3 className="font-semibold">{item.title}</h3>
-            {item.description && <p className="text-sm text-gray-500">{item.description}</p>}
+            <div className="flex justify-between">
+              <h3 className="font-semibold mb-1 flex-1">{item.title}</h3>
+              <div
+                className={clsx(
+                  'border-2  h-[18px] w-[18px] rounded-sm flex justify-center items-center',
+                  {
+                    'bg-[#08B1C7] border-[#08B1C7]': isSelected(item.id),
+                    'border-[#B5B9BE]': !isSelected(item.id),
+                  },
+                )}
+              >
+                {isSelected(item.id) && <Check width={11} strokeWidth={6} />}
+              </div>
+            </div>
+            {item.description && <p className="text-sm ">{item.description}</p>}
           </div>
         ))}
       </div>
 
-      <div className="pt-6">
-        <Button onClick={() => onFinishSelection(selected)} disabled={selected.length !== maxItems}>
-          Continue
+      <div className="pt-6 text-right">
+        <Button
+          onClick={() => onFinishSelection(selected)}
+          disabled={selected.length !== maxItems}
+          className={`px-6 ${selected.length !== maxItems ? 'bg-white text-[#B5B9BE]!' : ''}`}
+        >
+          {selected.length < maxItems ? (
+            `Select ${maxItems - selected.length} more`
+          ) : (
+            <div className="flex items-center ">
+              Continue <ArrowRight width={20} className="ml-1" />
+            </div>
+          )}
         </Button>
-        <p className="text-sm text-gray-500 mt-2">
-          Selected: {selected.length} / {maxItems}
-        </p>
       </div>
     </div>
   );

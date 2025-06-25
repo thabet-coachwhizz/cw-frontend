@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { RankedItem } from '@/types/assessments';
+import Loader from '@/components/ui/Loader';
 
 interface PairwiseSorterProps {
   items: RankedItem[];
@@ -93,33 +94,34 @@ export function PairwiseSorter({ items, onSorted, title }: PairwiseSorterProps) 
   };
 
   if (!currentLeft || !currentRight) {
-    return <div className="p-4 text-gray-500 text-sm">Loading next comparison...</div>;
+    return (
+      <div className="space-y-12 py-8 ">
+        <Loader />
+      </div>
+    );
   }
 
   return (
-    <div className="space-y-6">
-      {title && <h2 className="text-xl font-semibold">{title}</h2>}
-      <p className="text-sm text-gray-500">Which is more important to you?</p>
+    <div className="space-y-12 py-8 ">
+      {title && <h2 className="text-xl font-semibold w-full text-center">{title}</h2>}
 
-      <div className="flex flex-col sm:flex-row gap-4">
+      <div className="flex justify-between gap-4">
         <div
-          className="cursor-pointer border rounded-xl p-4 flex-1 hover:border-[#08B1C7] hover:bg-[#292A38]"
+          className="cursor-pointer border-2 border-[#B5B9BE] rounded-xl p-4 sm:p-10 flex-1 text-center bg-[#333546]  hover:border-[#08B1C7] hover:bg-[#292A38] opacity-60 hover:opacity-100 transition"
           onClick={() => handleSelect('left')}
         >
-          <h3 className="font-semibold">{currentLeft.title}</h3>
-          {currentLeft.description && (
-            <p className="text-sm text-gray-500">{currentLeft.description}</p>
-          )}
+          <h3 className="font-bold text-2xl mb-3">{currentLeft.title}</h3>
+          {currentLeft.description && <p className="text-lg ">{currentLeft.description}</p>}
         </div>
 
+        <div className="text-xl flex items-center">OR</div>
+
         <div
-          className="cursor-pointer border rounded-xl p-4 flex-1 hover:border-[#08B1C7] hover:bg-[#292A38]"
+          className="cursor-pointer border-2 border-[#B5B9BE] rounded-xl p-4 sm:p-10 flex-1 text-center bg-[#333546]  hover:border-[#08B1C7] hover:bg-[#292A38] opacity-60 hover:opacity-100 transition"
           onClick={() => handleSelect('right')}
         >
-          <h3 className="font-semibold">{currentRight.title}</h3>
-          {currentRight.description && (
-            <p className="text-sm text-gray-500">{currentRight.description}</p>
-          )}
+          <h3 className="font-bold text-2xl mb-3">{currentRight.title}</h3>
+          {currentRight.description && <p className="text-lg ">{currentRight.description}</p>}
         </div>
       </div>
     </div>
