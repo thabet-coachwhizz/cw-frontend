@@ -28,8 +28,11 @@ export default function OnboardingLayout({ children }: { children: React.ReactNo
 
   return (
     <>
-      <header className="p-4 flex justify-between items-center bg-[#2A2D37] border-[#22252F] border-b">
-        <span className="font-medium">On-Boarding </span>
+      <header className="py-6 px-14 flex justify-between items-center bg-[#2A2D37] border-[#22252F] border-b">
+        <span className=" text-3xl">
+          <span className="font-bold">Coach</span>
+          <span className="font-thin">Whizz</span>
+        </span>
 
         <Button onClick={logout}>Logout</Button>
       </header>

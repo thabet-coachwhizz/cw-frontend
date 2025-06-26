@@ -39,15 +39,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <span className="font-thin">Whizz</span>
           </span>
           <div className="px-12">
-            <Link href="/" className={clsx('px-4', pathname === '/' && 'font-bold text-primary')}>
+            <Link href="/" className={clsx('px-4  text-white!', pathname === '/' && 'font-bold')}>
               Home
             </Link>
             |
             <Link
               href="/challenges"
               className={clsx(
-                'px-4',
-                pathname.startsWith('/challenges') && 'font-bold text-primary',
+                'px-4  text-white!',
+                pathname.startsWith('/challenges') && 'font-bold',
               )}
             >
               Challenges

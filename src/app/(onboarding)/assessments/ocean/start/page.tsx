@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 import { useAssessmentSetup } from '@/hooks/useAssessmentSetup';
 import { useAssessmentFlow } from '@/hooks/useAssessmentFlow';
 import { AssessmentQuestion } from '@/components/assessments/AssessmentQuestion';
@@ -20,6 +22,8 @@ import { VerticalStepper, StepItem } from '@/components/assessments/VerticalStep
 
 export default function OceanAssessmentPage() {
   const slug = 'ocean';
+  const router = useRouter();
+  const { user } = useAuth();
   const { assessment, questions, steps, initialIndex, loading } = useAssessmentSetup(slug);
 
   const [step, setStep] = useState<'intro' | 'questions' | 'completed'>('intro');
@@ -77,7 +81,13 @@ export default function OceanAssessmentPage() {
       setSubmitting(false); // only re-enable on error
     }
   };
-
+  const handleDone = () => {
+    if (user?.onboarding_status === 'completed') {
+      router.push('/');
+    } else {
+      router.push('/onboarding/get-started');
+    }
+  };
   return (
     <>
       <TwoColumnLayout
@@ -147,13 +157,9 @@ export default function OceanAssessmentPage() {
                   develop new skills. Well use this to personalize your journey ahead.`}
                 </div>
 
-                <AppLink
-                  className="mt-6 p-3 w-full font-bold rounded-2xl!"
-                  variant="primary"
-                  href="/onboarding/get-started"
-                >
+                <Button onClick={handleDone} className="mt-6 p-3! w-full font-bold! rounded-2xl!">
                   DONE
-                </AppLink>
+                </Button>
               </div>
             </div>
           )}

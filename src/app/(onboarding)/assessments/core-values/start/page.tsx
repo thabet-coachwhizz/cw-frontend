@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 import clsx from 'clsx';
 import { useAssessmentSetup } from '@/hooks/useAssessmentSetup';
 import { TopSelectionList } from '@/components/assessments/TopSelectionList';
@@ -22,7 +24,8 @@ import { Check, Clock, Badge } from 'lucide-react';
 
 export default function CoreValuesStartPage() {
   const slug = 'core-values';
-
+  const router = useRouter();
+  const { user } = useAuth();
   const { assessment, questions: items, loading } = useAssessmentSetup(slug);
 
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
@@ -46,6 +49,14 @@ export default function CoreValuesStartPage() {
       console.error('Error submitting sorted values:', err);
       setIsSubmitting(false); // only re-enable on error
       // Optionally show a toast or error UI
+    }
+  };
+
+  const handleDone = () => {
+    if (user?.onboarding_status === 'completed') {
+      router.push('/');
+    } else {
+      router.push('/onboarding/get-started');
     }
   };
 
@@ -190,13 +201,9 @@ export default function CoreValuesStartPage() {
                     </p>
                   </div>
 
-                  <AppLink
-                    className="mt-6 p-3 w-full font-bold rounded-2xl!"
-                    variant="primary"
-                    href="/onboarding/get-started"
-                  >
+                  <Button onClick={handleDone} className="mt-6 p-3! w-full font-bold! rounded-2xl!">
                     DONE
-                  </AppLink>
+                  </Button>
                 </div>
               </div>
             )}

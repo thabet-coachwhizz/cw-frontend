@@ -108,7 +108,8 @@ function handleOnboardingRedirect(
     router.replace('/onboarding');
   }
 
-  if (!onboardingRequired && isOnboardingPage) {
+  // Allows users to revisit assessments even after completing onboarding
+  if (!onboardingRequired && pathname.startsWith('/onboarding')) {
     router.replace('/'); // go to home page
   }
 }
