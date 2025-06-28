@@ -9,9 +9,10 @@ import Link from '@/components/ui/Link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 import { hasPermission, PERMISSION_CREATE_OWN_CHALLENGE } from '@/utils/permissions';
+import AvatarMenu from './AvatarMenu';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-  const { user, loading, logout } = useAuth();
+  const { user, loading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const canCreateChallenges = hasPermission(user, PERMISSION_CREATE_OWN_CHALLENGE);
@@ -60,9 +61,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             )}
           </div>
           <div className="ml-auto">
-            <span className="hover:cursor-pointer" onClick={logout}>
-              Logout
-            </span>
+            <AvatarMenu />
           </div>
         </header>
       )}

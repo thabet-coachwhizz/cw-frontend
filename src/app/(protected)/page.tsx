@@ -1,13 +1,8 @@
 'use client';
-import { useState, useEffect } from 'react';
+
 import { useAuth } from '@/context/AuthContext';
-import ChallengeOnboardingFlow from '@/components/challenge/onboarding/ChallengeOnboardingFlow';
 import ChallengeEmptyState from '@/components/challenge/ChallengeEmptyState';
-import { getUserChallenges } from '@/lib/api/challenges';
-import { Challenge } from '@/types/challenge';
-import ChallengeList from '@/components/challenge/list/ChallengeList';
 import { useRouter } from 'next/navigation';
-import Button from '@/components/ui/Button';
 import Loader from '@/components/ui/Loader';
 import MiniProgressTracker from '@/components/onboarding/MiniProgressTracker';
 import { hasPermission, PERMISSION_CREATE_OWN_CHALLENGE } from '@/utils/permissions';
