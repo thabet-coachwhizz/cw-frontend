@@ -7,6 +7,7 @@ import Input from '@/components/ui/Input';
 import RadioGroup from '@/components/ui/RadioGroup';
 import Button from '@/components/ui/Button';
 import Form from '@/components/ui/Form';
+import Loader from '@/components/ui/Loader';
 
 export default function ProfilePage() {
   const { user, refreshUser } = useAuth();
@@ -21,6 +22,7 @@ export default function ProfilePage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [message, setMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -34,6 +36,7 @@ export default function ProfilePage() {
           title: data.title || '',
           work_environment: data.work_environment || '',
         });
+        setLoading(false);
       } catch (err) {
         console.error(err);
         if (user) {
@@ -46,6 +49,7 @@ export default function ProfilePage() {
             work_environment: user.work_environment || '',
           });
         }
+        setLoading(false);
       }
     };
 
@@ -94,68 +98,79 @@ export default function ProfilePage() {
 
   return (
     <div className="flex justify-center p-8">
-      <div className="w-full max-w-md space-y-6">
-        <h1 className="text-2xl font-semibold text-white">Your Profile</h1>
-        <Form onSubmit={handleSubmit} error={errors.form} message={message} disabled={submitting}>
-          <Input
-            type="text"
-            name="name"
-            label="Your name"
-            placeholder="Enter your name"
-            value={form.name}
-            onChange={handleChange}
-            error={errors.name}
-            required
-          />
-          <Input type="email" name="email" label="Email" value={form.email} readOnly disabled />
-          <RadioGroup
-            label="Your Gender"
-            name="gender"
-            options={[
-              { value: 'male', label: 'Male' },
-              { value: 'female', label: 'Female' },
-            ]}
-            value={form.gender}
-            onChange={handleChange}
-            error={errors.gender}
-            direction="row"
-          />
-          <Input
-            type="date"
-            name="birthdate"
-            label="Birthdate"
-            value={form.birthdate}
-            onChange={handleChange}
-            error={errors.birthdate}
-            required
-          />
-          <Input
-            type="text"
-            name="title"
-            label="Your role"
-            placeholder="Enter your role"
-            value={form.title}
-            onChange={handleChange}
-            error={errors.title}
-            required
-          />
-          <RadioGroup
-            label="Work type"
-            name="work_environment"
-            options={[
-              { value: 'remote', label: 'Remote' },
-              { value: 'hybrid', label: 'Hybrid' },
-              { value: 'on-premises', label: 'On Site' },
-            ]}
-            value={form.work_environment}
-            onChange={handleChange}
-            error={errors.work_environment}
-            direction="row"
-          />
-          <Button type="submit" loading={submitting} className="w-full">
-            Save Changes
-          </Button>
-        </Form>
+      <div className="flex justify-center items-center p-8 min-h-[300px]">
+        {loading ? (
+          <Loader />
+        ) : (
+          <div className="w-full max-w-lg space-y-6">
+            <h1 className="text-2xl font-semibold text-white">Your Profile</h1>
+            <Form
+              onSubmit={handleSubmit}
+              error={errors.form}
+              message={message}
+              disabled={submitting}
+            >
+              <Input
+                type="text"
+                name="name"
+                label="Your name"
+                placeholder="Enter your name"
+                value={form.name}
+                onChange={handleChange}
+                error={errors.name}
+                required
+              />
+              <Input type="email" name="email" label="Email" value={form.email} readOnly disabled />
+              <RadioGroup
+                label="Your Gender"
+                name="gender"
+                options={[
+                  { value: 'male', label: 'Male' },
+                  { value: 'female', label: 'Female' },
+                ]}
+                value={form.gender}
+                onChange={handleChange}
+                error={errors.gender}
+                direction="row"
+              />
+              <Input
+                type="date"
+                name="birthdate"
+                label="Birthdate"
+                value={form.birthdate}
+                onChange={handleChange}
+                error={errors.birthdate}
+                required
+              />
+              <Input
+                type="text"
+                name="title"
+                label="Your role"
+                placeholder="Enter your role"
+                value={form.title}
+                onChange={handleChange}
+                error={errors.title}
+                required
+              />
+              <RadioGroup
+                label="Work type"
+                name="work_environment"
+                options={[
+                  { value: 'remote', label: 'Remote' },
+                  { value: 'hybrid', label: 'Hybrid' },
+                  { value: 'on-premises', label: 'On Site' },
+                ]}
+                value={form.work_environment}
+                onChange={handleChange}
+                error={errors.work_environment}
+                direction="row"
+              />
+              <Button type="submit" loading={submitting} className="w-full mt-6">
+                Save Changes
+              </Button>
+            </Form>
+          </div>
+        )}
       </div>
     </div>
   );
