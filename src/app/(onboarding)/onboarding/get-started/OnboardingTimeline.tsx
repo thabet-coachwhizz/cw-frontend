@@ -1,6 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
+import { useRouter } from 'next/navigation';
 import Link from '@/components/ui/Link';
 import { AssessmentStepState } from '@/types/onboarding';
 import { skipAssessment } from '@/lib/api/assessments';
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export default function OnboardingTimeline({ steps, reloadProgress }: Props) {
+  const router = useRouter();
   const next = steps.find((step) => step.status == 'not_started');
   const nextIndex = steps.findIndex((s) => s.status === 'not_started');
   const total = steps.length;
@@ -30,8 +32,11 @@ export default function OnboardingTimeline({ steps, reloadProgress }: Props) {
     if (next && next.required === false) {
       try {
         await skipAssessment(next.slug);
+        await reloadProgress();
 
-        reloadProgress();
+        if (next.slug === 'career-passions') {
+          router.push('/onboarding/goal');
+        }
       } catch (err) {
         console.error('Failed to skip assessment:', err);
       }
@@ -39,6 +44,7 @@ export default function OnboardingTimeline({ steps, reloadProgress }: Props) {
       console.warn(`Skipping is not allowed for required assessment: ${next?.slug}`);
     }
   };
+
   return (
     <div className="space-y-8">
       {/* Progress header */}
