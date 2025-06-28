@@ -8,11 +8,13 @@ import Loader from '@/components/ui/Loader';
 import Link from '@/components/ui/Link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
+import { hasPermission, PERMISSION_CREATE_OWN_CHALLENGE } from '@/utils/permissions';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const canCreateChallenges = hasPermission(user, PERMISSION_CREATE_OWN_CHALLENGE);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -42,16 +44,20 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <Link href="/" className={clsx('px-4  text-white!', pathname === '/' && 'font-bold')}>
               Home
             </Link>
-            |
-            <Link
-              href="/challenges"
-              className={clsx(
-                'px-4  text-white!',
-                pathname.startsWith('/challenges') && 'font-bold',
-              )}
-            >
-              Challenges
-            </Link>
+            {canCreateChallenges && (
+              <>
+                |
+                <Link
+                  href="/challenges"
+                  className={clsx(
+                    'px-4  text-white!',
+                    pathname.startsWith('/challenges') && 'font-bold',
+                  )}
+                >
+                  Challenges
+                </Link>
+              </>
+            )}
           </div>
           <div className="ml-auto">
             <span className="hover:cursor-pointer" onClick={logout}>

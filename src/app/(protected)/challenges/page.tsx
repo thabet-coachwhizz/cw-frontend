@@ -8,13 +8,25 @@ import ChallengeList from '@/components/challenge/list/ChallengeList';
 import ChallengeOnboardingFlow from '@/components/challenge/onboarding/ChallengeOnboardingFlow';
 import Button from '@/components/ui/Button';
 import Loader from '@/components/ui/Loader';
+import withPagePermission from '@/utils/withPagePermission';
+import { PERMISSION_CREATE_OWN_CHALLENGE } from '@/utils/permissions';
 
-export default function ChallengesPage() {
+function ChallengesPage() {
   const router = useRouter();
   const [challenges, setChallenges] = useState<Challenge[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
 
+  // On mount: check if hash is #new
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash === '#new') {
+      setShowForm(true);
+      // Clean the URL after activating
+      setTimeout(() => {
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+      }, 0);
+    }
+  }, []);
   const loadChallenges = async () => {
     setLoading(true);
     try {
@@ -70,3 +82,5 @@ export default function ChallengesPage() {
     </div>
   );
 }
+
+export default withPagePermission(ChallengesPage, PERMISSION_CREATE_OWN_CHALLENGE);

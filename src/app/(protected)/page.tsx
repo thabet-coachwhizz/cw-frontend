@@ -10,37 +10,15 @@ import { useRouter } from 'next/navigation';
 import Button from '@/components/ui/Button';
 import Loader from '@/components/ui/Loader';
 import MiniProgressTracker from '@/components/onboarding/MiniProgressTracker';
+import { hasPermission, PERMISSION_CREATE_OWN_CHALLENGE } from '@/utils/permissions';
 
 export default function Home() {
   const { user } = useAuth();
-  const [showForm, setShowForm] = useState(false);
-  const [challenges, setChallenges] = useState<Challenge[]>([]);
-  const [loading, setLoading] = useState(true);
 
   const router = useRouter();
+  const canCreateChallenges = hasPermission(user, PERMISSION_CREATE_OWN_CHALLENGE);
 
-  const loadChallenges = async () => {
-    setLoading(true);
-    getUserChallenges()
-      .then((res) => {
-        setChallenges(res);
-      })
-      .finally(() => setLoading(false));
-  };
-
-  useEffect(() => {
-    loadChallenges();
-  }, []);
-
-  const handleFinish = (newChallengeId?: number) => {
-    setShowForm(false);
-    loadChallenges();
-    if (newChallengeId) {
-      router.push(`/challenges/${newChallengeId}`);
-    }
-  };
-
-  if (loading) return <Loader message="Loading challenges..." />;
+  if (!user) return <Loader message="Loading challenges..." />;
 
   return (
     <>
@@ -50,29 +28,13 @@ export default function Home() {
             <div className="text-[#FBFBFF]">Dashboard</div>
             <div className="text-white font-bold text-lg">Welcome back!</div>
           </div>
-          {showForm ? (
-            <>
-              <ChallengeOnboardingFlow onFinish={handleFinish} />
-            </>
-          ) : challenges.length === 0 ? (
-            <div className="rounded-2xl bg-[#333546] p-4 w-full">
-              <ChallengeEmptyState onStart={() => setShowForm(true)} />
-            </div>
-          ) : (
-            <>
-              <div className=" md:min-w-[700px] ">
-                <h2 className="text-xl font-semibold text-white mb-4">Active Challenges</h2>
-                <ChallengeList
-                  challenges={challenges}
-                  onSelect={(challenge) => router.push(`/challenges?id=${challenge.id}`)}
-                />
 
-                <Button onClick={() => setShowForm(true)} className="mt-4">
-                  Bring Another Challenge
-                </Button>
-              </div>
-            </>
+          {canCreateChallenges && (
+            <div className="rounded-2xl bg-[#333546] p-4 w-full">
+              <ChallengeEmptyState onStart={() => router.push(`/challenges#new`)} />
+            </div>
           )}
+
           <div>
             {user?.onboarding_progress && (
               <MiniProgressTracker progress={user.onboarding_progress} />

@@ -6,8 +6,10 @@ import { getChallengeById } from '@/lib/api/challenges';
 import { Challenge } from '@/types/challenge';
 import ChallengeDetail from '@/components/challenge/detail/ChallengeDetail';
 import Loader from '@/components/ui/Loader';
+import withPagePermission from '@/utils/withPagePermission';
+import { PERMISSION_CREATE_OWN_CHALLENGE } from '@/utils/permissions';
 
-export default function ChallengeDetailPage() {
+function ChallengeDetailPage() {
   const { id } = useParams();
   const router = useRouter();
 
@@ -46,3 +48,5 @@ export default function ChallengeDetailPage() {
     </div>
   );
 }
+
+export default withPagePermission(ChallengeDetailPage, PERMISSION_CREATE_OWN_CHALLENGE);

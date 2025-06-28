@@ -10,6 +10,7 @@ export interface User {
   onboarding_status?: 'not_started' | 'in_progress' | 'completed';
   onboarding_progress?: onboarding_progress;
   roles?: string[];
+  permissions?: string[];
 }
 
 export interface onboarding_progress {
