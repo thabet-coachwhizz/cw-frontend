@@ -8,12 +8,12 @@ import MiniProgressTracker from '@/components/onboarding/MiniProgressTracker';
 import { hasPermission, PERMISSION_CREATE_OWN_CHALLENGE } from '@/utils/permissions';
 
 export default function Home() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
   const router = useRouter();
   const canCreateChallenges = hasPermission(user, PERMISSION_CREATE_OWN_CHALLENGE);
 
-  if (!user) return <Loader message="Loading challenges..." />;
+  if (loading || user?.onboarding_status !== 'completed') return <Loader message=" " />;
 
   return (
     <>

@@ -38,8 +38,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       {user?.onboarding_status === 'completed' && (
         <header className="py-8 px-14 flex  items-center  bg-[#2A2D37] border-[#22252F] border-b">
           <span className=" text-3xl">
-            <span className="font-bold">Coach</span>
-            <span className="font-thin">Whizz</span>
+            <Link href="/" className="text-white">
+              <span className="font-bold">Coach</span>
+              <span className="font-thin">Whizz</span>
+            </Link>
           </span>
           <div className="px-12">
             <Link href="/" className={clsx('px-4  text-white!', pathname === '/' && 'font-bold')}>
