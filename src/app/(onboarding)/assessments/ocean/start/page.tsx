@@ -50,6 +50,24 @@ export default function OceanAssessmentPage() {
     setCurrentIndex((i) => i + 1);
   };
 
+  const handleSelectAndNext = (option: string) => {
+    const isLast = currentIndex === questions.length - 1;
+    const qId = questions[currentIndex].id;
+
+    setAnswers((prev) => {
+      const updated = { ...prev, [qId]: option };
+      return updated;
+    });
+    setError(null);
+
+    if (!isLast) {
+      // Wait for answers to update before next
+      setTimeout(() => {
+        setCurrentIndex((i) => i + 1);
+      }, 0);
+    }
+  };
+
   const handleBack = () => {
     if (currentIndex > 0) {
       setCurrentIndex((i) => i - 1);
@@ -120,6 +138,7 @@ export default function OceanAssessmentPage() {
                     isLast={currentIndex === questions.length - 1}
                     onBack={handleBack}
                     onNext={handleNext}
+                    onSelectAndNext={handleSelectAndNext}
                     onFinish={handleFinish}
                     submitting={submitting}
                     error={error}
