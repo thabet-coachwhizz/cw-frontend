@@ -8,7 +8,11 @@ import Loader from '@/components/ui/Loader';
 import Link from '@/components/ui/Link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
-import { hasPermission, PERMISSION_CREATE_OWN_CHALLENGE } from '@/utils/permissions';
+import {
+  hasPermission,
+  PERMISSION_CREATE_OWN_CHALLENGE,
+  PERMISSION_VIEW_USER_SUMMARIES,
+} from '@/utils/permissions';
 import AvatarMenu from './AvatarMenu';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -16,6 +20,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const canCreateChallenges = hasPermission(user, PERMISSION_CREATE_OWN_CHALLENGE);
+  const canViewSummaries = hasPermission(user, PERMISSION_VIEW_USER_SUMMARIES);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -58,6 +63,20 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   )}
                 >
                   Challenges
+                </Link>
+              </>
+            )}
+            {canViewSummaries && (
+              <>
+                |
+                <Link
+                  href="/user-summaries"
+                  className={clsx(
+                    'px-4  text-white!',
+                    pathname.startsWith('/user-summaries') && 'font-bold',
+                  )}
+                >
+                  User Summaries
                 </Link>
               </>
             )}

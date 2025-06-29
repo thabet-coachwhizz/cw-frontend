@@ -20,3 +20,18 @@ export interface onboarding_progress {
   passions_done: boolean;
   percent_complete: number;
 }
+
+export interface ListedUser {
+  id: string;
+  email: string;
+  name?: string;
+}
+
+export interface UserSummary {
+  intern_role: string;
+  work_environment: string;
+  goal_12_months: string;
+  core_values: string[];
+  career_passions: string[];
+  ocean_text: string;
+}

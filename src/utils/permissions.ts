@@ -1,5 +1,6 @@
 // Central definition of permission keys to avoid typos across the codebase
 export const PERMISSION_CREATE_OWN_CHALLENGE = 'challenges.create_own_challenge';
+export const PERMISSION_VIEW_USER_SUMMARIES = 'users.view_user_summaries';
 
 export function hasPermission(
   user: { permissions?: string[] } | null | undefined,

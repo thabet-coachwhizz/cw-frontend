@@ -27,4 +27,9 @@ export const API = {
   CHALLENGE_COMPLETE_TASK: (challengeId: number, taskId: number) =>
     `${API.CHALLENGE}${challengeId}/tasks/${taskId}/complete/`,
   CHALLENGE_DELETE: (challengeId: number) => `${API.CHALLENGE}${challengeId}/delete/`,
+
+  // User summaries (admin)
+  USERS_LIST: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/insight/users/`,
+  USER_SUMMARY: (userId: string) =>
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/insight/users/${userId}/`,
 };
