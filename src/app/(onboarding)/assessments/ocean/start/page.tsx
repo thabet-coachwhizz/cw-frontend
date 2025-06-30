@@ -36,11 +36,6 @@ export default function OceanAssessmentPage() {
 
   if (loading || !assessment) return <Loader />;
 
-  const handleAnswer = (option: string) => {
-    const q = questions[currentIndex];
-    setAnswers((prev) => ({ ...prev, [q.id]: option }));
-  };
-
   const handleNext = (selected?: string) => {
     if (!selected) {
       setError('Please select an answer before proceeding.');
@@ -50,22 +45,20 @@ export default function OceanAssessmentPage() {
     setCurrentIndex((i) => i + 1);
   };
 
-  const handleSelectAndNext = (option: string) => {
+  const handleAutoSelect = (option: string) => {
     const isLast = currentIndex === questions.length - 1;
     const qId = questions[currentIndex].id;
-
-    setAnswers((prev) => {
-      const updated = { ...prev, [qId]: option };
-      return updated;
-    });
+    const updatedAnswers = { ...answers, [qId]: option };
+    setAnswers(updatedAnswers);
     setError(null);
 
-    if (!isLast) {
-      // Wait for answers to update before next
-      setTimeout(() => {
+    setTimeout(() => {
+      if (isLast) {
+        handleFinish(qId, option);
+      } else {
         setCurrentIndex((i) => i + 1);
-      }, 0);
-    }
+      }
+    }, 0);
   };
 
   const handleBack = () => {
@@ -76,9 +69,10 @@ export default function OceanAssessmentPage() {
     }
   };
 
-  const handleFinish = async () => {
+  const handleFinish = async (qIdOverride?: number, selectedOverride?: string) => {
     const q = questions[currentIndex];
-    const selected = answers[q.id];
+    const qId = qIdOverride ?? q.id;
+    const selected = selectedOverride ?? answers[qId];
     if (!selected) {
       setError('Please select an answer before finishing.');
       return;
@@ -133,13 +127,11 @@ export default function OceanAssessmentPage() {
                     total={questions.length}
                     question={questions[currentIndex]}
                     selected={answers[questions[currentIndex].id] || undefined}
-                    onChange={handleAnswer}
+                    onChange={handleAutoSelect}
                     isFirst={currentIndex === 0}
                     isLast={currentIndex === questions.length - 1}
                     onBack={handleBack}
                     onNext={handleNext}
-                    onSelectAndNext={handleSelectAndNext}
-                    onFinish={handleFinish}
                     submitting={submitting}
                     error={error}
                   />

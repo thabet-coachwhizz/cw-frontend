@@ -22,8 +22,6 @@ export function AssessmentQuestion({
   isLast,
   onBack,
   onNext,
-  onSelectAndNext,
-  onFinish,
   submitting = false,
   error = null,
 }: {
@@ -36,8 +34,6 @@ export function AssessmentQuestion({
   isLast: boolean;
   onBack: () => void;
   onNext: (selected?: string) => void;
-  onSelectAndNext?: (option: string) => void;
-  onFinish: () => void;
   submitting: boolean;
   error?: string | null;
 }) {
@@ -66,19 +62,13 @@ export function AssessmentQuestion({
                   checked={isSelected}
                   onChange={(e) => onChange(e.target.value)}
                   className="h-4 w-4 accent-[#08B1C7]"
+                  disabled={submitting}
                 />
                 <span className="text-white flex-grow">{opt.text}</span>
-                {onSelectAndNext && !isLast && (
-                  <span
-                    onClick={(e) => {
-                      e.preventDefault(); // prevent bubbling if needed
-                      onSelectAndNext(opt.label);
-                    }}
-                    className="w-7 h-7 border-2 border-[#B5B9BE] hover:border-[#08B1C7] rounded-full flex items-center justify-center cursor-pointer transition"
-                  >
-                    <ArrowRight width={18} />
-                  </span>
-                )}
+
+                <span className="w-7 h-7 border-2 border-[#B5B9BE] rounded-full flex items-center justify-center cursor-pointer transition">
+                  <ArrowRight width={18} />
+                </span>
               </label>
             );
           })}
@@ -98,25 +88,17 @@ export function AssessmentQuestion({
           <div className="text-xl font-medium">
             {index + 1}/{total}
           </div>
-          {isLast ? (
-            <Button
-              onClick={onFinish}
-              disabled={submitting}
-              loading={submitting}
-              className="rounded-tl-none rounded-bl-none flex"
-            >
-              Submit <ArrowRight className="ml-2" />
-            </Button>
-          ) : (
-            <Button
-              onClick={() => {
-                onNext(selected);
-              }}
-              className="rounded-tl-none rounded-bl-none"
-            >
-              <ArrowRight />
-            </Button>
-          )}
+
+          <Button
+            variant="primary"
+            onClick={() => {
+              onNext(selected);
+            }}
+            disabled={isLast}
+            className="rounded-tl-none rounded-bl-none"
+          >
+            <ArrowRight />
+          </Button>
         </div>
       </div>
     </div>
