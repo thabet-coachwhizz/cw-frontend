@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Clock } from 'lucide-react';
 import Button from '@/components/ui/Button';
@@ -13,11 +13,23 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from '@/components/ui/Accordion';
+import Loader from '@/components/ui/Loader';
+import { getOnboardingProgress } from '@/lib/api/onboarding';
+import { useOnboardingRedirect } from '@/hooks/useOnboardingRedirect';
 
 export default function TermsPage() {
   const router = useRouter();
+  const [progress, setProgress] = useState<{ current_step: string | null }>({
+    current_step: null,
+  });
   const [checked, setChecked] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    getOnboardingProgress().then((res) => setProgress(res));
+  }, []);
+
+  useOnboardingRedirect(progress);
 
   const handleStart = async () => {
     if (!checked) return;
@@ -30,7 +42,9 @@ export default function TermsPage() {
       setSubmitting(false);
     }
   };
-
+  if (progress.current_step !== 'terms') {
+    return <Loader />;
+  }
   return (
     <TwoColumnLayout
       rightTop={

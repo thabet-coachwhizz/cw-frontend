@@ -1,15 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { updateProfile } from '@/lib/api/profile';
 import { useRouter } from 'next/navigation';
 import Input from '@/components/ui/Input';
 import RadioGroup from '@/components/ui/RadioGroup';
 import Button from '@/components/ui/Button';
 import Form from '@/components/ui/Form';
+import Loader from '@/components/ui/Loader';
+import { getOnboardingProgress } from '@/lib/api/onboarding';
+import { useOnboardingRedirect } from '@/hooks/useOnboardingRedirect';
 
 export default function ProfileStep() {
   const router = useRouter();
+  const [progress, setProgress] = useState<{ current_step: string | null }>({
+    current_step: null,
+  });
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
@@ -20,6 +26,12 @@ export default function ProfileStep() {
     work_environment: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    getOnboardingProgress().then((res) => setProgress(res));
+  }, []);
+
+  useOnboardingRedirect(progress);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -198,6 +210,10 @@ export default function ProfileStep() {
         return null;
     }
   };
+
+  if (progress.current_step !== 'profile') {
+    return <Loader />;
+  }
 
   return (
     <main className="min-h-screen flex items-center justify-center p-4">

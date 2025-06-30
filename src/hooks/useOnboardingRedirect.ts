@@ -18,9 +18,9 @@ export function useOnboardingRedirect(progress?: { current_step: string | null }
       case 'goal':
         router.replace('/onboarding/goal');
         break;
-      case 'review':
+      /*case 'review':
         router.replace('/onboarding/review');
-        break;
+        break;*/
       case 'done':
         router.replace('/');
         break;

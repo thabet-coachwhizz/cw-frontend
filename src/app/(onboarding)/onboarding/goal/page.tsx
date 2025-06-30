@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { updateGoal } from '@/lib/api/onboarding';
 import Button from '@/components/ui/Button';
@@ -12,11 +12,23 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from '@/components/ui/Accordion';
+import Loader from '@/components/ui/Loader';
+import { getOnboardingProgress } from '@/lib/api/onboarding';
+import { useOnboardingRedirect } from '@/hooks/useOnboardingRedirect';
 
 export default function GoalPage() {
+  const [progress, setProgress] = useState<{ current_step: string | null }>({
+    current_step: null,
+  });
   const [goal, setGoal] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    getOnboardingProgress().then((res) => setProgress(res));
+  }, []);
+
+  useOnboardingRedirect(progress);
 
   const handleFinish = async () => {
     if (!goal.trim()) return;
@@ -30,6 +42,9 @@ export default function GoalPage() {
     }
   };
 
+  if (progress.current_step !== 'goal') {
+    return <Loader />;
+  }
   return (
     <TwoColumnLayout
       rightTop={

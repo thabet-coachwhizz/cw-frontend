@@ -13,9 +13,10 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from '@/components/ui/Accordion';
+import { useOnboardingRedirect } from '@/hooks/useOnboardingRedirect';
 
 export default function GetStartedPage() {
-  const [progress, setProgress] = useState(null);
+  const [progress, setProgress] = useState<{ current_step: string | null } | null>(null);
   const [steps, setSteps] = useState<AssessmentStepState[]>([]);
 
   useEffect(() => {
@@ -29,7 +30,9 @@ export default function GetStartedPage() {
     });
   }
 
-  if (!progress) return <Loader />;
+  useOnboardingRedirect(progress ?? undefined);
+
+  if (!progress || progress.current_step !== 'assessment') return <Loader />;
 
   return (
     <TwoColumnLayout
