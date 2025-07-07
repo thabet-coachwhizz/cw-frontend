@@ -19,6 +19,8 @@ import {
 import Button from '@/components/ui/Button';
 import { Badge, Check } from 'lucide-react';
 import { VerticalStepper, StepItem } from '@/components/assessments/VerticalStepper';
+import styles from './QuestionPage.module.css';
+import clsx from 'clsx';
 
 export default function OceanAssessmentPage() {
   const slug = 'ocean';
@@ -31,6 +33,7 @@ export default function OceanAssessmentPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [animationClass, setAnimationClass] = useState<'in' | 'out' | null>('in');
 
   const { goToPrev } = useAssessmentFlow(steps, initialIndex);
 
@@ -52,13 +55,18 @@ export default function OceanAssessmentPage() {
     setAnswers(updatedAnswers);
     setError(null);
 
+    // Step 1: Delay animation to allow visual feedback of selection
     setTimeout(() => {
-      if (isLast) {
-        handleFinish(qId, option);
-      } else {
-        setCurrentIndex((i) => i + 1);
-      }
-    }, 0);
+      setAnimationClass('out');
+      setTimeout(() => {
+        if (isLast) {
+          handleFinish(qId, option);
+        } else {
+          setCurrentIndex((i) => i + 1);
+          setAnimationClass('in');
+        }
+      }, 300); // match .fadeScaleOut duration
+    }, 200); // short delay to apply visual feedback on option
   };
 
   const handleBack = () => {
@@ -122,19 +130,28 @@ export default function OceanAssessmentPage() {
 
               {step === 'questions' && (
                 <div className="max-w-[693px] rounded-2xl bg-[#333546] p-5">
-                  <AssessmentQuestion
-                    index={currentIndex}
-                    total={questions.length}
-                    question={questions[currentIndex]}
-                    selected={answers[questions[currentIndex].id] || undefined}
-                    onChange={handleAutoSelect}
-                    isFirst={currentIndex === 0}
-                    isLast={currentIndex === questions.length - 1}
-                    onBack={handleBack}
-                    onNext={handleNext}
-                    submitting={submitting}
-                    error={error}
-                  />
+                  <div
+                    key={questions[currentIndex].id}
+                    className={clsx(
+                      'transition-all',
+                      animationClass === 'in' && styles.fadeScaleIn,
+                      animationClass === 'out' && styles.fadeScaleOut,
+                    )}
+                  >
+                    <AssessmentQuestion
+                      index={currentIndex}
+                      total={questions.length}
+                      question={questions[currentIndex]}
+                      selected={answers[questions[currentIndex].id] || undefined}
+                      onChange={handleAutoSelect}
+                      isFirst={currentIndex === 0}
+                      isLast={currentIndex === questions.length - 1}
+                      onBack={handleBack}
+                      onNext={handleNext}
+                      submitting={submitting}
+                      error={error}
+                    />
+                  </div>
                 </div>
               )}
             </div>
