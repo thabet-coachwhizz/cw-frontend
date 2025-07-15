@@ -111,7 +111,7 @@ export default function CareerPassionsStartPage() {
                 setSelectedItems(ids);
                 setStep('sort');
               }}
-              maxItems={10}
+              minItems={10}
             />
           )}
           {step === 'sort' && (

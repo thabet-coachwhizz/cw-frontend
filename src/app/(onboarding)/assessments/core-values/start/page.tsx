@@ -112,7 +112,7 @@ export default function CoreValuesStartPage() {
                   setSelectedItems(ids);
                   setStep('sort');
                 }}
-                maxItems={10}
+                minItems={10}
               />
             )}
             {step === 'sort' && (

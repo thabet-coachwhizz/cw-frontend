@@ -9,7 +9,11 @@ import clsx from 'clsx';
 interface TopSelectionListProps {
   items: RankedItem[];
   onFinishSelection: (selected: number[]) => void;
-  maxItems?: number;
+  /**
+   * Minimum number of items that must be selected before the user
+   * can continue. Defaults to 10.
+   */
+  minItems?: number;
   title?: string;
   description?: string;
 }
@@ -17,25 +21,19 @@ interface TopSelectionListProps {
 /**
  * TopSelectionList
  *
- * Allows the user to select a limited number of items (e.g. top 10).
+ * Allows the user to select at least a minimum number of items (default  10).
  * Used in Core Values and Career Passions assessments before sorting.
  */
 export function TopSelectionList({
   items,
   onFinishSelection,
-  maxItems = 10,
+  minItems = 10,
   title = 'Select your top items',
 }: TopSelectionListProps) {
   const [selected, setSelected] = useState<number[]>([]);
 
   const toggle = (id: number) => {
-    setSelected((prev) =>
-      prev.includes(id)
-        ? prev.filter((v) => v !== id)
-        : prev.length < maxItems
-          ? [...prev, id]
-          : prev,
-    );
+    setSelected((prev) => (prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]));
   };
 
   const isSelected = (id: number) => selected.includes(id);
@@ -80,11 +78,11 @@ export function TopSelectionList({
       <div className="pt-6 text-right">
         <Button
           onClick={() => onFinishSelection(selected)}
-          disabled={selected.length !== maxItems}
-          className={`px-6 ${selected.length !== maxItems ? 'bg-white text-[#B5B9BE]!' : ''}`}
+          disabled={selected.length < minItems}
+          className={`px-6 ${selected.length < minItems ? 'bg-white text-[#B5B9BE]!' : ''}`}
         >
-          {selected.length < maxItems ? (
-            `Select ${maxItems - selected.length} more`
+          {selected.length < minItems ? (
+            `Select ${minItems - selected.length} more`
           ) : (
             <div className="flex items-center ">
               Continue <ArrowRight width={20} className="ml-1" />
