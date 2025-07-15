@@ -44,7 +44,7 @@ export default function GetStartedPage() {
     >
       <div className=" flex items-center justify-center">
         <div className="w-full max-w-[693px] ">
-          <h1 className="text-2xl pb-4">Profile Assessments</h1>
+          <h1 className="text-xl sm:text-2xl pb-4">Profile Assessments</h1>
           <div className="p-4 rounded-xl shadow bg-[#333546]">
             <OnboardingTimeline steps={steps} reloadProgress={loadProgress} />
           </div>

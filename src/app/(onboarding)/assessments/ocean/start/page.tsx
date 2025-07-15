@@ -120,9 +120,9 @@ export default function OceanAssessmentPage() {
         <div className=" flex items-center justify-center">
           {step !== 'completed' ? (
             <div className="w-full max-w-[600px] ">
-              <div className="text-2xl pb-6">
+              <div className="text-xl sm:text-2xl pb-6">
                 <AppLink href="/onboarding/get-started"> Profile Assessments</AppLink>
-                <span className="px-4">{'>'}</span>
+                <span className="px-2 sm:px-4">{'>'}</span>
                 <span className="font-semibold">Personality Assessment</span>
               </div>
 

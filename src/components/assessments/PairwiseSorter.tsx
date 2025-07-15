@@ -105,7 +105,7 @@ export function PairwiseSorter({ items, onSorted, title }: PairwiseSorterProps) 
     <div className="space-y-12 py-8 ">
       {title && <h2 className="text-xl font-semibold w-full text-center">{title}</h2>}
 
-      <div className="flex justify-between gap-4">
+      <div className="flex flex-col sm:flex-row justify-between gap-4">
         <div
           className="cursor-pointer border-2 border-[#B5B9BE] rounded-xl p-4 sm:p-10 flex-1 text-center bg-[#333546]  hover:border-[#08B1C7] hover:bg-[#292A38] opacity-60 hover:opacity-100 transition"
           onClick={() => handleSelect('left')}
@@ -114,7 +114,7 @@ export function PairwiseSorter({ items, onSorted, title }: PairwiseSorterProps) 
           {currentLeft.description && <p className="text-lg ">{currentLeft.description}</p>}
         </div>
 
-        <div className="text-xl flex items-center">OR</div>
+        <div className="text-xl flex flex-col sm:flex-row items-center">OR</div>
 
         <div
           className="cursor-pointer border-2 border-[#B5B9BE] rounded-xl p-4 sm:p-10 flex-1 text-center bg-[#333546]  hover:border-[#08B1C7] hover:bg-[#292A38] opacity-60 hover:opacity-100 transition"

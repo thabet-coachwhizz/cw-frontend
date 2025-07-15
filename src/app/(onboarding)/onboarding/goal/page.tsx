@@ -54,10 +54,12 @@ export default function GoalPage() {
       }
     >
       <div className="flex items-center justify-center">
-        <div className="max-w-[453px] mx-auto space-y-6 p-6">
+        <div className="max-w-[453px] mx-auto space-y-6 sm:p-6">
           <div className="uppercase text-[#919196] p-4">What are your goals?</div>
           <div className="bg-[#333546] rounded-2xl p-4">
-            <h1 className="text-3xl font-semibold mb-4">Where Are You Headed in 12 months?</h1>
+            <h1 className="text-2xl sm:text-3xl font-semibold mb-4">
+              Where Are You Headed in 12 months?
+            </h1>
 
             <Textarea
               label=" Fast forward 12 months—what does career success look like for you? Are you leading a

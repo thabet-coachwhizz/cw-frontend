@@ -5,7 +5,6 @@ import { useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Loader from '@/components/ui/Loader';
-import Logo from '@/components/ui/Logo';
 import Image from 'next/image';
 
 export default function GuardedPage({ children }: { children: React.ReactNode }) {
@@ -27,12 +26,23 @@ export default function GuardedPage({ children }: { children: React.ReactNode })
       {/* LEFT SECTION */}
       <div className="flex flex-col justify-between bg-[#22252F] text-white md:w-1/2 w-full  pt-14">
         {/* Top: Logo + Title + Description */}
-        <div className="px-14">
+        <div className="px-6 md:px-14">
           <div className="mb-10">
-            <Logo /> {/* Replace with your <Logo /> component or <img> */}
+            <div className="w-40 md:w-48 lg:w-64">
+              <Image
+                src="/logo.png"
+                alt="CoachWhizz Logo"
+                width={256}
+                height={84}
+                className="w-full h-auto"
+                priority
+              />
+            </div>
           </div>
           <div>
-            <h1 className="text-4xl font-bold mb-2">Soft Skills Development Platform</h1>
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2">
+              Soft Skills Development Platform
+            </h1>
             <p className="text-lg max-w-[489px]">
               Interns log real challenges. AI turns them into tasks they complete on the job. You
               scale soft skills training affordably. They gain an edge in the job market.
@@ -53,7 +63,7 @@ export default function GuardedPage({ children }: { children: React.ReactNode })
       </div>
 
       {/* RIGHT SECTION */}
-      <div className="flex flex-1 items-center justify-center p-14  bg-[#2A2D37]">
+      <div className="flex flex-1 items-center justify-center p-6 md:p-14  bg-[#2A2D37]">
         <div className="w-full max-w-md">{children}</div>
       </div>
     </main>

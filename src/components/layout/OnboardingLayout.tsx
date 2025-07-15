@@ -28,7 +28,7 @@ export default function OnboardingLayout({ children }: { children: React.ReactNo
 
   return (
     <>
-      <header className="py-6 px-14 flex justify-between items-center bg-[#2A2D37] border-[#22252F] border-b">
+      <header className="py-6 px-6 sm:px-14 flex justify-between items-center bg-[#2A2D37] border-[#22252F] border-b">
         <span className=" text-3xl">
           <span className="font-bold">Coach</span>
           <span className="font-thin">Whizz</span>

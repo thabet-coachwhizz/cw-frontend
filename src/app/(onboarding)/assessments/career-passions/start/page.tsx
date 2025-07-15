@@ -91,9 +91,9 @@ export default function CareerPassionsStartPage() {
           })}
         >
           {(step === 'select' || step === 'sort') && (
-            <div className="text-2xl pb-6">
+            <div className="text-xl sm:text-2xl pb-6">
               <AppLink href="/onboarding/get-started"> Profile Assessments</AppLink>{' '}
-              <span className="px-4">{'>'}</span>
+              <span className="px-2 sm:px-4">{'>'}</span>
               <span className="font-semibold">Career Passions</span>
             </div>
           )}

@@ -26,7 +26,7 @@ export default function TwoColumnLayout({
   return (
     <div className={`flex flex-1 overflow-hidden ${className}`}>
       {/* Left column */}
-      <div className="flex-1 flex justify-center  p-4 lg:p-20">
+      <div className="flex-1 flex justify-center px-4 py-12 lg:p-20">
         <div className={`w-full max-w-[${leftMaxWidth}]`}>{children}</div>
       </div>
 

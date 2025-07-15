@@ -216,7 +216,7 @@ export default function ProfileStep() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-4">
+    <main className="flex flex-1 items-center justify-center p-4">
       <div className="w-full max-w-lg bg-[#2A2D37] p-8 rounded-2xl shadow space-y-4 text-[#BBBBC0]">
         {renderStep()}
       </div>
